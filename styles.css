@@ -1,0 +1,207 @@
+:root {
+    --primary-purple: #6C63FF;
+    --text-color: #1A1A1A;
+    --background: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background: var(--background);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    padding: 1rem 2rem;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+h1 {
+    font-family: "EB Garamond", Garamond, "Garamond Premier Pro", "Times New Roman", serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+button {
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.moodboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#moodboard {
+    width: 600px;
+    height: 600px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.choose-file {
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    margin-top: auto;
+}
+
+.footer-links {
+    margin-bottom: 0.5rem;
+}
+
+footer a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.copyright {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.instagram-link {
+    display: flex;
+    align-items: center;
+    color: #000000;
+    margin-right: 1.5rem;
+    opacity: 0.8;
+}
+
+.instagram-link:hover {
+    opacity: 1;
+    color: #000000;
+}
+
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+.legal-content h1 {
+    margin-bottom: 1rem;
+}
+
+.legal-content h2 {
+    margin: 2rem 0 1rem;
+    font-size: 1.3rem;
+}
+
+.legal-content p {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.legal-content .effective-date {
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.legal-content a {
+    color: var(--primary-purple);
+    text-decoration: none;
+}
+
+.legal-content a:hover {
+    text-decoration: underline;
+}
+
+.contact-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.contact-content h1 {
+    margin-bottom: 2rem;
+}
+
+.contact-message {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.contact-message a {
+    color: var(--primary-purple);
+    text-decoration: none;
+}
+
+.contact-message a:hover {
+    text-decoration: underline;
+}
+
+.social-links {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.social-icon {
+    color: #000000;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.social-icon:hover {
+    opacity: 1;
+} 

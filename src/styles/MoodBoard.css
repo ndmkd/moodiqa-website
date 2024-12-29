@@ -1,0 +1,21 @@
+.mood-board {
+  position: relative;
+  background: #f5f5f5;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+}
+
+.mood-board.square {
+  width: 800px;
+  height: 800px;
+}
+
+.mood-board.landscape {
+  width: 1000px;
+  height: 600px;
+}
+
+.mood-board.portrait {
+  width: 400px;
+  height: 800px;
+} 
