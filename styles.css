@@ -277,4 +277,60 @@ footer a {
     }
 }
 
+/* Mobile-specific adjustments */
+@media screen and (max-width: 480px) {
+    /* Moodboard adjustments */
+    #moodboard {
+        width: 95vw;
+        height: 95vw;
+        margin: 10px auto;
+    }
+
+    /* Header and text adjustments */
+    h1 {
+        font-size: 1.8rem;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+
+    /* Control buttons */
+    .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+        width: 95vw;
+        margin: 0 auto;
+    }
+
+    .controls button {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    /* Navigation adjustments */
+    nav {
+        padding: 10px 15px;
+    }
+
+    .nav-right {
+        gap: 15px;
+    }
+
+    /* Main content container */
+    main {
+        padding: 10px;
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* Image controls on moodboard */
+    .image-controls {
+        transform: scale(0.8);
+    }
+}
+
 /* Add viewport meta tag to all HTML files */ 
