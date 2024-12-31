@@ -74,6 +74,10 @@ function makeImageDraggable(img, controls) {
     document.addEventListener('touchmove', drag);
     document.addEventListener('touchend', dragEnd);
 
+    // Update controls position whenever the image is clicked
+    img.addEventListener('mousedown', () => updateControlsPosition(img, controls));
+    img.addEventListener('touchstart', () => updateControlsPosition(img, controls));
+
     function dragStart(e) {
         if (e.type === 'touchstart') {
             initialX = e.touches[0].clientX - img.offsetLeft;
@@ -103,7 +107,7 @@ function makeImageDraggable(img, controls) {
             img.style.left = currentX + "px";
             img.style.top = currentY + "px";
             
-            // Update controls position
+            // Update controls position while dragging
             updateControlsPosition(img, controls);
         }
     }
@@ -112,6 +116,8 @@ function makeImageDraggable(img, controls) {
         initialX = currentX;
         initialY = currentY;
         isDragging = false;
+        // Update controls position after drag ends
+        updateControlsPosition(img, controls);
     }
 }
 
@@ -121,6 +127,12 @@ function rotateImage(img, degrees) {
     const currentDegrees = parseInt(currentRotation[1]) || 0;
     const newRotation = currentDegrees + degrees;
     img.style.transform = `rotate(${newRotation}deg)`;
+    
+    // Find and update controls position after rotation
+    const controls = img.parentElement.querySelector('.image-controls');
+    if (controls) {
+        updateControlsPosition(img, controls);
+    }
 }
 
 function resizeImage(img, factor) {
@@ -128,6 +140,12 @@ function resizeImage(img, factor) {
     const currentHeight = img.offsetHeight;
     img.style.width = (currentWidth * factor) + 'px';
     img.style.height = (currentHeight * factor) + 'px';
+    
+    // Find and update controls position after resize
+    const controls = img.parentElement.querySelector('.image-controls');
+    if (controls) {
+        updateControlsPosition(img, controls);
+    }
 }
 
 function deleteImage(img, controls) {
@@ -136,9 +154,17 @@ function deleteImage(img, controls) {
 }
 
 function updateControlsPosition(img, controls) {
-    const rect = img.getBoundingClientRect();
-    controls.style.left = rect.left + 'px';
-    controls.style.top = (rect.top - 40) + 'px';
+    const moodboard = document.getElementById('moodboard');
+    const moodboardRect = moodboard.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    
+    // Calculate position relative to the moodboard
+    const top = imgRect.top - moodboardRect.top - 40; // 40px above the image
+    const left = imgRect.left - moodboardRect.left;
+    
+    controls.style.position = 'absolute';
+    controls.style.top = `${top}px`;
+    controls.style.left = `${left}px`;
 }
 
 // Board size changes
