@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeImage = null;
     let initialX, initialY;
     let isResizing = false;
+    let isDragging = false;
+    let selectedImage = null;
 
     function handleImageUpload(e) {
         const files = Array.from(e.target.files);
@@ -106,6 +108,49 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentDegrees = parseInt(currentRotation.match(/\d+/) || 0);
         const newRotation = (currentDegrees + 90) % 360;
         wrapper.style.transform = `rotate(${newRotation}deg)`;
+    }
+
+    function handleTouchStart(e) {
+        if (e.target.classList.contains('uploaded-image')) {
+            e.preventDefault();
+            // Ensure only one image is being moved
+            if (!isDragging) {
+                isDragging = true;
+                selectedImage = e.target;
+                const touch = e.touches[0];
+                initialX = touch.clientX - selectedImage.offsetLeft;
+                initialY = touch.clientY - selectedImage.offsetTop;
+                
+                // Remove any duplicate images that might have been created
+                document.querySelectorAll('.uploaded-image').forEach(img => {
+                    if (img !== selectedImage && img.src === selectedImage.src) {
+                        img.remove();
+                    }
+                });
+            }
+        }
+    }
+
+    function handleTouchMove(e) {
+        if (isDragging && selectedImage) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const x = touch.clientX - initialX;
+            const y = touch.clientY - initialY;
+            
+            // Keep image within moodboard boundaries
+            const moodboard = document.getElementById('moodboard');
+            const maxX = moodboard.clientWidth - selectedImage.clientWidth;
+            const maxY = moodboard.clientHeight - selectedImage.clientHeight;
+            
+            selectedImage.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
+            selectedImage.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
+        }
+    }
+
+    function handleTouchEnd() {
+        isDragging = false;
+        selectedImage = null;
     }
 });
 
@@ -384,47 +429,4 @@ function saveMoodboard() {
         // Show controls again
         controls.forEach(control => control.style.display = '');
     });
-}
-
-let selectedImage = null;
-let initialX = 0;
-let initialY = 0;
-
-function handleTouchStart(e) {
-    if (e.target.classList.contains('uploaded-image')) {
-        selectedImage = e.target;
-        const touch = e.touches[0];
-        initialX = touch.clientX - selectedImage.offsetLeft;
-        initialY = touch.clientY - selectedImage.offsetTop;
-    }
-}
-
-function handleTouchMove(e) {
-    if (selectedImage) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const x = touch.clientX - initialX;
-        const y = touch.clientY - initialY;
-        
-        // Keep image within moodboard boundaries
-        const moodboard = document.getElementById('moodboard');
-        const maxX = moodboard.clientWidth - selectedImage.clientWidth;
-        const maxY = moodboard.clientHeight - selectedImage.clientHeight;
-        
-        selectedImage.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
-        selectedImage.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
-    }
-}
-
-function handleTouchEnd() {
-    selectedImage = null;
-}
-
-function selectImage(image) {
-    // Deselect any previously selected image
-    const allImages = document.querySelectorAll('.uploaded-image');
-    allImages.forEach(img => img.classList.remove('selected'));
-    
-    // Select the tapped image
-    image.classList.add('selected');
 } 
