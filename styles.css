@@ -204,4 +204,77 @@ footer a {
 
 .social-icon:hover {
     opacity: 1;
-} 
+}
+
+/* For tablets */
+@media screen and (max-width: 768px) {
+    /* Moodboard size adjustments */
+    #moodboard {
+        width: 90vw;  /* 90% of viewport width */
+        height: 90vw;  /* Keep it square */
+        margin: 0 auto;
+    }
+
+    /* Controls adjustments */
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .controls button {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Main content spacing */
+    main {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+/* For mobile phones */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+        margin: 1rem 0;
+    }
+
+    /* Adjust navigation */
+    nav {
+        padding: 10px;
+    }
+
+    .nav-right {
+        gap: 0.8rem;
+    }
+
+    /* Contact page adjustments */
+    .contact-message {
+        font-size: 0.9rem;
+        padding: 0 15px;
+    }
+
+    .social-links {
+        gap: 1.5rem;
+    }
+
+    /* Footer adjustments */
+    footer {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+/* Add viewport meta tag to all HTML files */ 
