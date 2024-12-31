@@ -56,8 +56,12 @@ h1 {
 
 .controls {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;  /* Space after the moodboard */
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 button {
@@ -343,4 +347,23 @@ footer a {
 .uploaded-image.selected {
     border: 2px solid var(--primary-purple);
     opacity: 0.8;
+}
+
+input[type="file"] {
+    margin: 10px 0;
+    width: auto;
+    order: -1;  /* This ensures it appears first */
+}
+
+@media screen and (max-width: 480px) {
+    .controls {
+        flex-direction: column;
+        padding: 10px;
+        gap: 8px;
+    }
+
+    input[type="file"] {
+        width: 100%;
+        margin: 5px 0;
+    }
 } 
