@@ -177,55 +177,36 @@ function changeBoardSize(size) {
 // Handle image uploads and drag-and-drop
 function initializeMoodboard() {
     const moodboard = document.getElementById('moodboard');
-    
-    // Add touch event handlers for mobile
-    moodboard.addEventListener('touchstart', handleTouchStart, false);
-    moodboard.addEventListener('touchmove', handleTouchMove, false);
-    moodboard.addEventListener('touchend', handleTouchEnd, false);
-    
-    // Double tap to select image
-    let lastTap = 0;
-    moodboard.addEventListener('touchend', function(e) {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTap;
-        if (tapLength < 500 && tapLength > 0) {
-            // Double tap detected
-            const touch = e.changedTouches[0];
-            const element = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (element.classList.contains('uploaded-image')) {
-                selectImage(element);
-            }
+    const fileInput = document.querySelector('input[type="file"]');
+
+    // File input handler
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                addImageToMoodboard(e.target.result);
+            };
+            reader.readAsDataURL(file);
         }
-        lastTap = currentTime;
     });
 
-    // Set position relative on moodboard for proper positioning of images
-    moodboard.style.position = 'relative';
+    // Touch event handlers
+    moodboard.addEventListener('touchstart', handleTouchStart, { passive: false });
+    moodboard.addEventListener('touchmove', handleTouchMove, { passive: false });
+    moodboard.addEventListener('touchend', handleTouchEnd);
+}
 
-    // Handle file input changes
-    document.querySelector('.choose-file').addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.multiple = true;
-        
-        // Changed to use addEventListener instead of onchange
-        input.addEventListener('change', (e) => {
-            const files = e.target.files;
-            if (files && files.length > 0) {
-                handleFiles(files);
-            }
-        });
-        
-        input.click();
-    });
-
-    // Modify dragover to not change background color
-    moodboard.addEventListener('dragover', (e) => {
-        e.preventDefault();
-    });
-
-    moodboard.addEventListener('drop', handleDrop);
+function addImageToMoodboard(src) {
+    const moodboard = document.getElementById('moodboard');
+    const img = document.createElement('img');
+    img.src = src;
+    img.className = 'uploaded-image';
+    img.style.position = 'absolute';
+    img.style.left = '50%';
+    img.style.top = '50%';
+    img.style.transform = 'translate(-50%, -50%)';
+    moodboard.appendChild(img);
 }
 
 // Handle dropped files
