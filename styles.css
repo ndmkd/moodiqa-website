@@ -54,7 +54,7 @@ h1 {
     margin-bottom: 2rem;
 }
 
-.controls {
+.board-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,7 +62,7 @@ h1 {
     margin: 20px 0;
 }
 
-.controls button {
+.board-controls button {
     padding: 8px 16px;
     background-color: var(--primary-purple);
     color: white;
@@ -71,33 +71,28 @@ h1 {
     cursor: pointer;
 }
 
-.controls button:hover {
+.board-controls button:hover {
     opacity: 0.9;
 }
 
-.moodboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+.file-input-container {
+    text-align: center;
+    margin-top: 20px;
 }
 
-#moodboard {
+#fileInput {
+    margin: 0 auto;
+}
+
+.moodboard {
     width: 600px;
     height: 600px;
-    background: #FFFFFF;
-    border-radius: 10px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.choose-file {
-    background: transparent;
-    color: var(--text-color);
-    border: none;
 }
 
 footer {
