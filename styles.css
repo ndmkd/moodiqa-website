@@ -334,3 +334,13 @@ footer a {
 }
 
 /* Add viewport meta tag to all HTML files */ 
+
+.uploaded-image {
+    touch-action: none; /* Prevents default touch behaviors */
+    user-select: none; /* Prevents text selection during drag */
+}
+
+.uploaded-image.selected {
+    border: 2px solid var(--primary-purple);
+    opacity: 0.8;
+} 

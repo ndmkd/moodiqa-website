@@ -133,6 +133,27 @@ function changeBoardSize(size) {
 function initializeMoodboard() {
     const moodboard = document.getElementById('moodboard');
     
+    // Add touch event handlers for mobile
+    moodboard.addEventListener('touchstart', handleTouchStart, false);
+    moodboard.addEventListener('touchmove', handleTouchMove, false);
+    moodboard.addEventListener('touchend', handleTouchEnd, false);
+    
+    // Double tap to select image
+    let lastTap = 0;
+    moodboard.addEventListener('touchend', function(e) {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        if (tapLength < 500 && tapLength > 0) {
+            // Double tap detected
+            const touch = e.changedTouches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (element.classList.contains('uploaded-image')) {
+                selectImage(element);
+            }
+        }
+        lastTap = currentTime;
+    });
+
     // Set position relative on moodboard for proper positioning of images
     moodboard.style.position = 'relative';
 
@@ -363,4 +384,47 @@ function saveMoodboard() {
         // Show controls again
         controls.forEach(control => control.style.display = '');
     });
+}
+
+let selectedImage = null;
+let initialX = 0;
+let initialY = 0;
+
+function handleTouchStart(e) {
+    if (e.target.classList.contains('uploaded-image')) {
+        selectedImage = e.target;
+        const touch = e.touches[0];
+        initialX = touch.clientX - selectedImage.offsetLeft;
+        initialY = touch.clientY - selectedImage.offsetTop;
+    }
+}
+
+function handleTouchMove(e) {
+    if (selectedImage) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const x = touch.clientX - initialX;
+        const y = touch.clientY - initialY;
+        
+        // Keep image within moodboard boundaries
+        const moodboard = document.getElementById('moodboard');
+        const maxX = moodboard.clientWidth - selectedImage.clientWidth;
+        const maxY = moodboard.clientHeight - selectedImage.clientHeight;
+        
+        selectedImage.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
+        selectedImage.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
+    }
+}
+
+function handleTouchEnd() {
+    selectedImage = null;
+}
+
+function selectImage(image) {
+    // Deselect any previously selected image
+    const allImages = document.querySelectorAll('.uploaded-image');
+    allImages.forEach(img => img.classList.remove('selected'));
+    
+    // Select the tapped image
+    image.classList.add('selected');
 } 
