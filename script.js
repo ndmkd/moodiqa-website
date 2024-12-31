@@ -15,15 +15,21 @@ document.querySelector('input[type="file"]').addEventListener('change', function
             // Create image controls
             const controls = document.createElement('div');
             controls.className = 'image-controls';
+            controls.style.display = 'none'; // Hide by default
             
             // Rotate buttons
             const rotateLeft = document.createElement('button');
             rotateLeft.innerHTML = '↺';
-            rotateLeft.onclick = () => rotateImage(img, -90);
+            let rotation = 0;
+            rotateLeft.onmousedown = startRotation(-1); // Counter-clockwise
+            rotateLeft.onmouseup = stopRotation;
+            rotateLeft.onmouseleave = stopRotation;
             
             const rotateRight = document.createElement('button');
             rotateRight.innerHTML = '↻';
-            rotateRight.onclick = () => rotateImage(img, 90);
+            rotateRight.onmousedown = startRotation(1); // Clockwise
+            rotateRight.onmouseup = stopRotation;
+            rotateRight.onmouseleave = stopRotation;
             
             // Size buttons
             const sizeDown = document.createElement('button');
@@ -39,23 +45,67 @@ document.querySelector('input[type="file"]').addEventListener('change', function
             deleteBtn.innerHTML = '×';
             deleteBtn.onclick = () => deleteImage(img, controls);
             
-            // Add buttons to controls
             controls.appendChild(rotateLeft);
             controls.appendChild(rotateRight);
             controls.appendChild(sizeDown);
             controls.appendChild(sizeUp);
             controls.appendChild(deleteBtn);
             
-            // Add image and controls to moodboard
             const moodboard = document.getElementById('moodboard');
             moodboard.appendChild(img);
             moodboard.appendChild(controls);
             
             makeImageDraggable(img, controls);
+
+            // Show controls when image is clicked
+            img.addEventListener('mousedown', () => {
+                controls.style.display = 'flex';
+                updateControlsPosition(img, controls);
+            });
+
+            // Hide controls when clicking outside
+            document.addEventListener('mousedown', (e) => {
+                if (e.target !== img && !controls.contains(e.target)) {
+                    controls.style.display = 'none';
+                }
+            });
         };
         reader.readAsDataURL(file);
     }
 });
+
+let rotationInterval = null;
+
+function startRotation(direction) {
+    return function(e) {
+        e.preventDefault();
+        const img = this.parentElement.previousSibling;
+        if (rotationInterval) clearInterval(rotationInterval);
+        rotationInterval = setInterval(() => {
+            const currentRotation = getCurrentRotation(img);
+            img.style.transform = `rotate(${currentRotation + (direction * 2)}deg)`;
+        }, 20);
+    };
+}
+
+function stopRotation() {
+    if (rotationInterval) {
+        clearInterval(rotationInterval);
+        rotationInterval = null;
+    }
+}
+
+function getCurrentRotation(element) {
+    const transform = element.style.transform;
+    let rotation = 0;
+    if (transform) {
+        const matches = transform.match(/rotate\(([-\d.]+)deg\)/);
+        if (matches) {
+            rotation = parseFloat(matches[1]);
+        }
+    }
+    return rotation;
+}
 
 // Make images draggable
 function makeImageDraggable(img, controls) {
