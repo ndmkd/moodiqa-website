@@ -112,22 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleTouchStart(e) {
         if (e.target.classList.contains('uploaded-image')) {
-            e.preventDefault();
-            // Ensure only one image is being moved
-            if (!isDragging) {
-                isDragging = true;
-                selectedImage = e.target;
-                const touch = e.touches[0];
-                initialX = touch.clientX - selectedImage.offsetLeft;
-                initialY = touch.clientY - selectedImage.offsetTop;
-                
-                // Remove any duplicate images that might have been created
-                document.querySelectorAll('.uploaded-image').forEach(img => {
-                    if (img !== selectedImage && img.src === selectedImage.src) {
-                        img.remove();
-                    }
-                });
-            }
+            isDragging = true;
+            selectedImage = e.target;
+            const touch = e.touches[0];
+            initialX = touch.clientX - selectedImage.offsetLeft;
+            initialY = touch.clientY - selectedImage.offsetTop;
         }
     }
 
@@ -137,14 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const touch = e.touches[0];
             const x = touch.clientX - initialX;
             const y = touch.clientY - initialY;
-            
-            // Keep image within moodboard boundaries
-            const moodboard = document.getElementById('moodboard');
-            const maxX = moodboard.clientWidth - selectedImage.clientWidth;
-            const maxY = moodboard.clientHeight - selectedImage.clientHeight;
-            
-            selectedImage.style.left = `${Math.min(Math.max(0, x), maxX)}px`;
-            selectedImage.style.top = `${Math.min(Math.max(0, y), maxY)}px`;
+            selectedImage.style.left = x + 'px';
+            selectedImage.style.top = y + 'px';
         }
     }
 
@@ -410,4 +393,59 @@ function saveMoodboard() {
         // Show controls again
         controls.forEach(control => control.style.display = '');
     });
+}
+
+// File upload functionality
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'uploaded-image';
+            img.style.position = 'absolute';
+            img.style.left = '50%';
+            img.style.top = '50%';
+            img.style.transform = 'translate(-50%, -50%)';
+            document.getElementById('moodboard').appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Touch events (separate from file upload)
+let isDragging = false;
+let selectedImage = null;
+let initialX = 0;
+let initialY = 0;
+
+document.getElementById('moodboard').addEventListener('touchstart', handleTouchStart);
+document.getElementById('moodboard').addEventListener('touchmove', handleTouchMove);
+document.getElementById('moodboard').addEventListener('touchend', handleTouchEnd);
+
+function handleTouchStart(e) {
+    if (e.target.classList.contains('uploaded-image')) {
+        isDragging = true;
+        selectedImage = e.target;
+        const touch = e.touches[0];
+        initialX = touch.clientX - selectedImage.offsetLeft;
+        initialY = touch.clientY - selectedImage.offsetTop;
+    }
+}
+
+function handleTouchMove(e) {
+    if (isDragging && selectedImage) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const x = touch.clientX - initialX;
+        const y = touch.clientY - initialY;
+        selectedImage.style.left = x + 'px';
+        selectedImage.style.top = y + 'px';
+    }
+}
+
+function handleTouchEnd() {
+    isDragging = false;
+    selectedImage = null;
 } 
