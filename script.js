@@ -80,11 +80,23 @@ function startRotation(direction) {
     return function(e) {
         e.preventDefault();
         const img = this.parentElement.previousSibling;
-        if (rotationInterval) clearInterval(rotationInterval);
-        rotationInterval = setInterval(() => {
-            const currentRotation = getCurrentRotation(img);
-            img.style.transform = `rotate(${currentRotation + (direction * 2)}deg)`;
-        }, 20);
+        
+        // For mobile touch events
+        if (e.type === 'touchstart') {
+            if (rotationInterval) clearInterval(rotationInterval);
+            rotationInterval = setInterval(() => {
+                const currentRotation = getCurrentRotation(img);
+                img.style.transform = `rotate(${currentRotation + (direction * 2)}deg)`;
+            }, 20);
+        }
+        // For desktop mouse events
+        else {
+            if (rotationInterval) clearInterval(rotationInterval);
+            rotationInterval = setInterval(() => {
+                const currentRotation = getCurrentRotation(img);
+                img.style.transform = `rotate(${currentRotation + (direction * 2)}deg)`;
+            }, 20);
+        }
     };
 }
 
@@ -238,10 +250,40 @@ function changeBoardSize(size) {
 
 // Save functionality
 function saveMoodboard() {
-    html2canvas(document.getElementById('moodboard')).then(function(canvas) {
+    const moodboard = document.getElementById('moodboard');
+    
+    // Hide all control buttons before capturing
+    const controls = document.querySelectorAll('.image-controls');
+    controls.forEach(control => control.style.display = 'none');
+
+    // Use html2canvas with proper settings
+    html2canvas(moodboard, {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: null,
+        scale: 2, // Higher quality
+    }).then(function(canvas) {
+        // Create download link
         const link = document.createElement('a');
         link.download = 'moodboard.png';
-        link.href = canvas.toDataURL();
+        link.href = canvas.toDataURL('image/png');
+        
+        // Trigger download
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        
+        // Show controls again
+        controls.forEach(control => control.style.display = 'flex');
+    }).catch(function(error) {
+        console.error('Error saving moodboard:', error);
+        alert('There was an error saving your moodboard. Please try again.');
     });
 }
+
+// Add touch event listeners for rotation buttons
+const addRotationControls = (button, img) => {
+    button.addEventListener('touchstart', startRotation(button.classList.contains('rotate-right') ? 1 : -1));
+    button.addEventListener('touchend', stopRotation);
+    button.addEventListener('touchcancel', stopRotation);
+};
