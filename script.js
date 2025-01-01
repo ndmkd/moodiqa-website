@@ -177,4 +177,11 @@ function showImageControls(img) {
         let rotation = parseInt(img.style.transform.replace('rotate(', '')) || 0;
         img.style.transform = `rotate(${rotation + 15}deg)`;
     };
+
+    // Delete control
+    document.getElementById('deleteBtn').onclick = () => {
+        img.remove();
+        controls.style.display = 'none';
+        selectedImage = null;
+    };
 }
