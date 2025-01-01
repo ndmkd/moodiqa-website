@@ -1,130 +1,304 @@
-:root {
-    --primary-purple: #6B4DE6;
-    --text-color: #333;
-    --background-color: #fff;
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
+    line-height: 1.6;
+    color: #333;
+    background-color: white;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Navigation */
 nav {
-    padding: 15px 0;
+    width: 100%;
+    padding: 20px 0;
+    margin-bottom: 40px;
 }
 
 .nav-links {
     display: flex;
-    align-items: center;
-    gap: 20px;
     justify-content: flex-end;
+    align-items: center;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-right: 60px;
 }
 
 .nav-links a {
-    color: var(--text-color);
     text-decoration: none;
+    color: #333;
     font-size: 14px;
-}
-
-.instagram-icon {
-    width: 16px;
-    height: 16px;
-    display: block;
-    filter: grayscale(100%);
+    display: flex;
+    align-items: center;
 }
 
 .nav-links a:hover {
-    color: var(--primary-purple);
+    color: #6B4DE6;
 }
 
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
+.instagram-icon {
+    width: 20px;
+    height: 20px;
+    fill: #333;
+    transition: fill 0.2s;
+    display: block;
 }
 
+.instagram-icon:hover {
+    fill: #6B4DE6;
+}
+
+/* Header */
 h1 {
     font-size: 48px;
     margin-bottom: 10px;
 }
 
 .subtitle {
-    font-size: 18px;
     color: #666;
     margin-bottom: 40px;
 }
 
+/* Controls */
+.controls {
+    margin-bottom: 30px;
+}
+
+.control-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    background-color: #6B4DE6;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.control-button:hover {
+    background-color: #5a3ed0;
+}
+
+/* Moodboard */
 .moodboard-container {
-    margin-top: 20px;
+    text-align: center;
 }
 
 #imageInput {
     display: none;
 }
 
-.upload-button {
+.choose-file {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--primary-purple);
-    color: white;
-    border-radius: 5px;
+    padding: 8px 16px;
+    margin-top: 20px;
+    color: #333;
     cursor: pointer;
-    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
-.moodboard {
-    width: 100%;
-    min-height: 600px;
+.choose-file:hover {
     background-color: #f5f5f5;
-    border-radius: 10px;
+}
+
+#moodboard {
+    width: 800px;
+    height: 600px;
+    background: white;
+    margin: 20px auto;
     position: relative;
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    transition: width 0.3s, height 0.3s;
 }
 
 .moodboard-image {
     max-width: 300px;
-    margin: 10px;
+    position: absolute;
     cursor: move;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    user-select: none;
+    transform-origin: center;
 }
 
-.password-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.moodboard-image.editable {
+    border: 2px solid #6B4DE6;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #6B4DE6;
+    border-radius: 50%;
+}
+
+.rotate-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #6B4DE6;
+    border-radius: 50%;
+    cursor: pointer;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: #333;
+}
+
+.footer-links {
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: #333;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.copyright {
+    font-size: 12px;
+    color: #666;
+}
+
+.image-controls {
+    position: absolute;
+    display: none;
     background: white;
-    z-index: 9999;
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.control-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #6B4DE6;
+    color: white;
+    border-radius: 50%;
+    margin: 0 2px;
+    cursor: pointer;
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.password-container {
+.control-btn:hover {
+    background: #5a3ed0;
+}
+
+.terms-content,
+.privacy-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.terms-content h1,
+.privacy-content h1 {
+    margin-bottom: 40px;
     text-align: center;
 }
 
-.password-container input {
-    padding: 8px 16px;
-    margin: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.terms-content section,
+.privacy-content section {
+    margin-bottom: 30px;
 }
 
-.password-container button {
-    padding: 8px 16px;
+.terms-content h2,
+.privacy-content h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.terms-content p,
+.privacy-content p {
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.contact-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.contact-content h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-button {
     background: #6B4DE6;
     color: white;
+    padding: 12px 24px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.2s;
 }
 
-.password-container h2 {
-    font-weight: bold;
-    margin-bottom: 20px;
+.submit-button:hover {
+    background: #5a3ed0;
 }

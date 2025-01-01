@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodiqa</title>
+    <title>Contact Us - Moodiqa</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,20 +19,28 @@
             </div>
         </nav>
 
-        <h1>Moodiqa</h1>
-        <p class="subtitle">Create moodboards in seconds - simple, fast, and free.</p>
+        <div class="contact-content">
+            <a href="index.html" class="back-home">← Back to Home</a>
+            <h1>Contact Us</h1>
+            
+            <form class="contact-form" action="https://formspree.io/f/mnngyer" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
 
-        <div class="controls">
-            <button class="control-button" id="squareFormat">Square</button>
-            <button class="control-button" id="phoneFormat">Phone/Story</button>
-            <button class="control-button" id="landscapeFormat">Landscape</button>
-            <button class="control-button" id="saveBoard">Save Mood Board</button>
-        </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
 
-        <div class="moodboard-container">
-            <div id="moodboard"></div>
-            <input type="file" id="imageInput" accept="image/*" multiple>
-            <label for="imageInput" class="choose-file">Choose File</label>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
         </div>
 
         <footer>
@@ -42,7 +50,5 @@
             <p class="copyright">Copyright © - All rights reserved Atlas Dune LLC</p>
         </footer>
     </div>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="script.js"></script>
 </body>
 </html> 
