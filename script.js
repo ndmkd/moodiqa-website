@@ -56,11 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const moodboard = document.getElementById('moodboard');
     
     fileInput.addEventListener('change', function(e) {
+        console.log('File selected:', e.target.files);
         const files = e.target.files;
         for (let file of files) {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    console.log('File loaded:', e.target.result.substring(0, 50));
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'moodboard-image';
