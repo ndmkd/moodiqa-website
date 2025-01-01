@@ -1,15 +1,19 @@
 {
   "name": "moodiqa-project",
   "version": "1.0.0",
-  "main": "script.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "live-server"
   },
   "keywords": [],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase": "^11.1.0"
+    "firebase": "^10.x.x"
   },
-  "description": ""
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
 }
