@@ -20,7 +20,7 @@ body {
 }
 
 nav {
-    padding: 10px 20px;
+    padding: 15px 0;
 }
 
 .nav-left {
@@ -35,9 +35,10 @@ nav {
 }
 
 .instagram-icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    display: block;
+    filter: grayscale(100%);
 }
 
 .auth-btn {
@@ -522,19 +523,20 @@ input[type="file"] {
 } 
 
 .nav-links {
-    padding: 1rem;
-    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-end;
+    padding-right: 0;
+    margin-right: 0;
 }
 
 .nav-links a {
     color: var(--text-color);
     text-decoration: none;
-    margin-right: 20px;
     font-size: 14px;
 }
 
 .nav-links a:hover {
     color: var(--primary-purple);
-}
-
-/* Keep your existing modal styles */
+} 
