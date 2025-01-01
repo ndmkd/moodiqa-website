@@ -20,12 +20,39 @@ body {
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 1rem 2rem;
     background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-left a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.instagram-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.auth-btn {
+    padding: 6px 12px;
+    background-color: var(--primary-purple);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.auth-btn:hover {
+    opacity: 0.9;
 }
 
 .nav-right {
