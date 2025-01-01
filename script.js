@@ -322,3 +322,34 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         alert('Signup failed: ' + error.message);
     }
 });
+
+// Modal handling
+const modal = document.getElementById('authModal');
+const authButton = document.getElementById('authButton');
+const closeBtn = document.querySelector('.close');
+
+authButton.onclick = () => {
+    modal.style.display = 'block';
+}
+
+closeBtn.onclick = () => {
+    modal.style.display = 'none';
+}
+
+window.onclick = (e) => {
+    if (e.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Update auth state
+auth.onAuthStateChanged(user => {
+    if (user) {
+        authButton.textContent = 'Sign Out';
+        authButton.onclick = () => {
+            logOut();
+            authButton.textContent = 'Sign In / Sign Up';
+            authButton.onclick = () => modal.style.display = 'block';
+        };
+    }
+});
