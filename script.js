@@ -1,4 +1,5 @@
 import { signUp, signIn, logOut } from './auth.js';
+import { auth } from './firebase.js';
 
 // File Upload
 document.querySelector('input[type="file"]').addEventListener('change', function(e) {
@@ -290,57 +291,54 @@ const addRotationControls = (button, img) => {
     button.addEventListener('touchcancel', stopRotation);
 };
 
-// Add these event listeners
+// Modal handling
+const modal = document.getElementById('authModal');
+const authButton = document.getElementById('authButton');
+const closeBtn = document.querySelector('.close');
+
+// Open modal when clicking Sign In
+authButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.style.display = 'block';
+});
+
+// Close modal when clicking X
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target == modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Handle login form submission
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
     try {
-        const user = await signIn(email, password);
-        console.log('Logged in:', user);
-        // Hide login form and show moodboard
-        document.querySelector('.auth-container').style.display = 'none';
-        document.getElementById('moodboard').style.display = 'block';
+        await signIn(email, password);
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
 });
 
+// Handle signup form submission
 document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     
     try {
-        const user = await signUp(email, password);
-        console.log('Signed up:', user);
-        // Hide login form and show moodboard
-        document.querySelector('.auth-container').style.display = 'none';
-        document.getElementById('moodboard').style.display = 'block';
+        await signUp(email, password);
     } catch (error) {
         alert('Signup failed: ' + error.message);
     }
 });
-
-// Modal handling
-const modal = document.getElementById('authModal');
-const authButton = document.getElementById('authButton');
-const closeBtn = document.querySelector('.close');
-
-authButton.onclick = () => {
-    modal.style.display = 'block';
-}
-
-closeBtn.onclick = () => {
-    modal.style.display = 'none';
-}
-
-window.onclick = (e) => {
-    if (e.target == modal) {
-        modal.style.display = 'none';
-    }
-}
 
 // Update auth state
 auth.onAuthStateChanged(user => {
