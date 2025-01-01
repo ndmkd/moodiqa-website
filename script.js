@@ -56,20 +56,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const moodboard = document.getElementById('moodboard');
     
     fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'moodboard-image';
-                img.draggable = true;
-                moodboard.appendChild(img);
-                
-                // Add drag functionality
-                img.addEventListener('mousedown', startDragging);
-            };
-            reader.readAsDataURL(file);
+        const files = e.target.files;
+        for (let file of files) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'moodboard-image';
+                    img.draggable = true;
+                    moodboard.appendChild(img);
+                    
+                    // Add drag functionality
+                    img.addEventListener('mousedown', startDragging);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     });
 });
