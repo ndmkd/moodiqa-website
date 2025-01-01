@@ -1,3 +1,12 @@
+// Password protection
+function checkPassword() {
+    const password = document.getElementById('site-password').value;
+    if (password === 'moodiqa2024') {
+        document.getElementById('password-overlay').style.display = 'none';
+    }
+}
+
+// Original moodboard functionality
 document.addEventListener('DOMContentLoaded', function() {
     const moodboard = document.getElementById('moodboard');
     const imageInput = document.getElementById('imageInput');
@@ -6,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const landscapeBtn = document.getElementById('landscapeFormat');
     const saveBtn = document.getElementById('saveBoard');
 
-    // Format buttons
     squareBtn.addEventListener('click', () => {
         moodboard.style.width = '600px';
         moodboard.style.height = '600px';
@@ -22,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
         moodboard.style.height = '500px';
     });
 
-    // Save functionality
     saveBtn.addEventListener('click', () => {
         html2canvas(moodboard).then(canvas => {
             const link = document.createElement('a');
@@ -32,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Image upload and drag functionality
     imageInput.addEventListener('change', function(e) {
         const files = e.target.files;
         for (let file of files) {
@@ -41,13 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.className = 'moodboard-image';
-                
-                // Random position within moodboard
-                const x = Math.random() * (moodboard.offsetWidth - 200);
-                const y = Math.random() * (moodboard.offsetHeight - 200);
-                img.style.left = x + 'px';
-                img.style.top = y + 'px';
-                
+                img.style.left = Math.random() * (moodboard.offsetWidth - 200) + 'px';
+                img.style.top = Math.random() * (moodboard.offsetHeight - 200) + 'px';
                 moodboard.appendChild(img);
                 makeImageDraggable(img);
             };
@@ -83,7 +84,3 @@ function makeImageDraggable(element) {
         document.onmousemove = null;
     }
 }
-
-<rewritten_block>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-</rewritten_block>
