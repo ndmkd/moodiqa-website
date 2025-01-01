@@ -1,3 +1,5 @@
+import { signUp, signIn, logOut } from './auth.js';
+
 // File Upload
 document.querySelector('input[type="file"]').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -287,3 +289,36 @@ const addRotationControls = (button, img) => {
     button.addEventListener('touchend', stopRotation);
     button.addEventListener('touchcancel', stopRotation);
 };
+
+// Add these event listeners
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+        const user = await signIn(email, password);
+        console.log('Logged in:', user);
+        // Hide login form and show moodboard
+        document.querySelector('.auth-container').style.display = 'none';
+        document.getElementById('moodboard').style.display = 'block';
+    } catch (error) {
+        alert('Login failed: ' + error.message);
+    }
+});
+
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    
+    try {
+        const user = await signUp(email, password);
+        console.log('Signed up:', user);
+        // Hide login form and show moodboard
+        document.querySelector('.auth-container').style.display = 'none';
+        document.getElementById('moodboard').style.display = 'block';
+    } catch (error) {
+        alert('Signup failed: ' + error.message);
+    }
+});
