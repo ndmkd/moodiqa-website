@@ -522,6 +522,7 @@ input[type="file"] {
 } 
 
 .nav-links {
+    padding: 1rem;
     text-align: left;
 }
 
@@ -534,4 +535,6 @@ input[type="file"] {
 
 .nav-links a:hover {
     color: var(--primary-purple);
-} 
+}
+
+/* Keep your existing modal styles */
