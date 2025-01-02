@@ -199,17 +199,14 @@ function makeImageInteractive(img) {
     let isDragging = false;
     let startTime = 0;
     let lastTap = 0;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
+    let touchOffset = { x: 0, y: 0 };
 
-    // Touch events with improved handling
+    // Touch events
     img.addEventListener('touchstart', handleTouchStart, { passive: false });
     img.addEventListener('touchmove', handleTouchMove, { passive: false });
     img.addEventListener('touchend', handleTouchEnd, { passive: false });
 
-    // Mouse events
+    // Mouse events remain the same for desktop
     img.addEventListener('mousedown', handleMouseDown);
     img.addEventListener('mousemove', handleMouseMove);
     img.addEventListener('mouseup', handleMouseUp);
@@ -217,8 +214,13 @@ function makeImageInteractive(img) {
     function handleTouchStart(e) {
         e.preventDefault();
         const touch = e.touches[0];
+        const rect = img.getBoundingClientRect();
+        
+        // Calculate offset between touch point and image position
+        touchOffset.x = touch.clientX - rect.left;
+        touchOffset.y = touch.clientY - rect.top;
+        
         startTime = Date.now();
-
         const currentTime = new Date().getTime();
         const tapLength = currentTime - lastTap;
         
@@ -229,11 +231,7 @@ function makeImageInteractive(img) {
         }
         lastTap = currentTime;
 
-        initialX = touch.clientX - xOffset;
-        initialY = touch.clientY - yOffset;
         isDragging = true;
-
-        // Add active state styling
         img.style.opacity = '0.8';
     }
 
@@ -242,12 +240,24 @@ function makeImageInteractive(img) {
         e.preventDefault();
 
         const touch = e.touches[0];
-        const currentX = touch.clientX - initialX;
-        const currentY = touch.clientY - initialY;
+        const moodboard = document.getElementById('moodboard');
+        const moodboardRect = moodboard.getBoundingClientRect();
+        
+        // Calculate new position relative to the moodboard
+        let newX = touch.clientX - moodboardRect.left - touchOffset.x;
+        let newY = touch.clientY - moodboardRect.top - touchOffset.y;
+        
+        // Keep image within moodboard bounds
+        const imgRect = img.getBoundingClientRect();
+        const maxX = moodboardRect.width - imgRect.width;
+        const maxY = moodboardRect.height - imgRect.height;
+        
+        newX = Math.min(Math.max(0, newX), maxX);
+        newY = Math.min(Math.max(0, newY), maxY);
 
-        xOffset = currentX;
-        yOffset = currentY;
-        setTranslate(currentX, currentY, img);
+        // Update image position
+        img.style.left = `${newX}px`;
+        img.style.top = `${newY}px`;
     }
 
     function handleTouchEnd(e) {
@@ -255,18 +265,17 @@ function makeImageInteractive(img) {
         e.preventDefault();
 
         isDragging = false;
-        // Remove active state styling
         img.style.opacity = '1';
 
-        // If it was a quick tap (less than 300ms), treat it as a click
         if (Date.now() - startTime < 300) {
             selectImage(e);
         }
     }
 
     function handleMouseDown(e) {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
+        const rect = img.getBoundingClientRect();
+        touchOffset.x = e.clientX - rect.left;
+        touchOffset.y = e.clientY - rect.top;
         isDragging = true;
     }
 
@@ -274,28 +283,25 @@ function makeImageInteractive(img) {
         if (!isDragging) return;
         e.preventDefault();
 
-        const currentX = e.clientX - initialX;
-        const currentY = e.clientY - initialY;
+        const moodboard = document.getElementById('moodboard');
+        const moodboardRect = moodboard.getBoundingClientRect();
+        
+        let newX = e.clientX - moodboardRect.left - touchOffset.x;
+        let newY = e.clientY - moodboardRect.top - touchOffset.y;
+        
+        const imgRect = img.getBoundingClientRect();
+        const maxX = moodboardRect.width - imgRect.width;
+        const maxY = moodboardRect.height - imgRect.height;
+        
+        newX = Math.min(Math.max(0, newX), maxX);
+        newY = Math.min(Math.max(0, newY), maxY);
 
-        xOffset = currentX;
-        yOffset = currentY;
-        setTranslate(currentX, currentY, img);
+        img.style.left = `${newX}px`;
+        img.style.top = `${newY}px`;
     }
 
     function handleMouseUp(e) {
         isDragging = false;
-    }
-
-    function setTranslate(xPos, yPos, el) {
-        // Get current rotation and scale
-        const currentTransform = el.style.transform;
-        const rotation = currentTransform.match(/rotate\(([-\d.]+)deg\)/) ?
-            currentTransform.match(/rotate\(([-\d.]+)deg\)/)[1] : 0;
-        const scale = currentTransform.match(/scale\(([-\d.]+)\)/) ?
-            currentTransform.match(/scale\(([-\d.]+)\)/)[1] : 1;
-
-        // Apply translation while preserving rotation and scale
-        el.style.transform = `translate(${xPos}px, ${yPos}px) rotate(${rotation}deg) scale(${scale})`;
     }
 
     function selectImage(e) {
