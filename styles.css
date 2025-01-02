@@ -472,6 +472,25 @@ footer a:hover {
         user-select: none;
         touch-action: none;
     }
+
+    /* Improve touch interactions */
+    .draggable {
+        transition: opacity 0.2s ease;
+        will-change: transform;
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .draggable:active {
+        opacity: 0.8;
+    }
+
+    /* Add visual feedback for active state */
+    .draggable.dragging {
+        opacity: 0.8;
+        cursor: grabbing;
+    }
 }
 
 /* Small mobile devices */

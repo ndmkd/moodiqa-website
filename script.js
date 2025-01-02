@@ -197,67 +197,105 @@ function showImageControls(img) {
 
 function makeImageInteractive(img) {
     let isDragging = false;
-    let currentX;
-    let currentY;
+    let startTime = 0;
+    let lastTap = 0;
     let initialX;
     let initialY;
     let xOffset = 0;
     let yOffset = 0;
 
-    // Touch events
-    img.addEventListener('touchstart', dragStart, { passive: false });
-    img.addEventListener('touchend', dragEnd, { passive: false });
-    img.addEventListener('touchmove', drag, { passive: false });
+    // Touch events with improved handling
+    img.addEventListener('touchstart', handleTouchStart, { passive: false });
+    img.addEventListener('touchmove', handleTouchMove, { passive: false });
+    img.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     // Mouse events
-    img.addEventListener('mousedown', dragStart);
-    img.addEventListener('mouseup', dragEnd);
-    img.addEventListener('mousemove', drag);
+    img.addEventListener('mousedown', handleMouseDown);
+    img.addEventListener('mousemove', handleMouseMove);
+    img.addEventListener('mouseup', handleMouseUp);
 
-    // Handle image selection
-    img.addEventListener('click', selectImage);
-    img.addEventListener('touchend', selectImage);
+    function handleTouchStart(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        startTime = Date.now();
 
-    function dragStart(e) {
-        if (e.type === 'touchstart') {
-            initialX = e.touches[0].clientX - xOffset;
-            initialY = e.touches[0].clientY - yOffset;
-        } else {
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        
+        if (tapLength < 300 && tapLength > 0) {
+            // Double tap detected
+            selectImage(e);
+            return;
         }
+        lastTap = currentTime;
 
-        if (e.target === img) {
-            isDragging = true;
+        initialX = touch.clientX - xOffset;
+        initialY = touch.clientY - yOffset;
+        isDragging = true;
+
+        // Add active state styling
+        img.style.opacity = '0.8';
+    }
+
+    function handleTouchMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const touch = e.touches[0];
+        const currentX = touch.clientX - initialX;
+        const currentY = touch.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+        setTranslate(currentX, currentY, img);
+    }
+
+    function handleTouchEnd(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        isDragging = false;
+        // Remove active state styling
+        img.style.opacity = '1';
+
+        // If it was a quick tap (less than 300ms), treat it as a click
+        if (Date.now() - startTime < 300) {
+            selectImage(e);
         }
     }
 
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault();
-
-            if (e.type === 'touchmove') {
-                currentX = e.touches[0].clientX - initialX;
-                currentY = e.touches[0].clientY - initialY;
-            } else {
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-            }
-
-            xOffset = currentX;
-            yOffset = currentY;
-            setTranslate(currentX, currentY, img);
-        }
+    function handleMouseDown(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        isDragging = true;
     }
 
-    function dragEnd(e) {
-        initialX = currentX;
-        initialY = currentY;
+    function handleMouseMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const currentX = e.clientX - initialX;
+        const currentY = e.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+        setTranslate(currentX, currentY, img);
+    }
+
+    function handleMouseUp(e) {
         isDragging = false;
     }
 
     function setTranslate(xPos, yPos, el) {
-        el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+        // Get current rotation and scale
+        const currentTransform = el.style.transform;
+        const rotation = currentTransform.match(/rotate\(([-\d.]+)deg\)/) ?
+            currentTransform.match(/rotate\(([-\d.]+)deg\)/)[1] : 0;
+        const scale = currentTransform.match(/scale\(([-\d.]+)\)/) ?
+            currentTransform.match(/scale\(([-\d.]+)\)/)[1] : 1;
+
+        // Apply translation while preserving rotation and scale
+        el.style.transform = `translate(${xPos}px, ${yPos}px) rotate(${rotation}deg) scale(${scale})`;
     }
 
     function selectImage(e) {
