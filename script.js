@@ -116,20 +116,17 @@ document.addEventListener('keydown', function(e) {
 // Format buttons
 document.getElementById('squareFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
-    moodboard.style.width = '600px';
-    moodboard.style.height = '600px';
+    moodboard.className = 'square-format';
 });
 
 document.getElementById('phoneFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
-    moodboard.style.width = '400px';
-    moodboard.style.height = '700px';
+    moodboard.className = 'phone-format';
 });
 
 document.getElementById('landscapeFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
-    moodboard.style.width = '800px';
-    moodboard.style.height = '500px';
+    moodboard.className = 'landscape-format';
 });
 
 // Save functionality

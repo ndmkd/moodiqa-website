@@ -380,7 +380,27 @@ footer a:hover {
     }
 
     #moodboard {
-        height: 400px; /* Shorter on mobile */
+        max-width: 90vw; /* 90% of viewport width */
+        height: 90vw; /* Square format by default */
+    }
+
+    /* Square format */
+    #moodboard.square-format {
+        width: 90vw;
+        height: 90vw;
+    }
+
+    /* Phone/Story format */
+    #moodboard.phone-format {
+        width: 60vw;
+        height: 90vw;
+        max-width: 400px;
+    }
+
+    /* Landscape format */
+    #moodboard.landscape-format {
+        width: 90vw;
+        height: 60vw;
     }
 
     .control-button {
@@ -422,7 +442,13 @@ footer a:hover {
     }
 
     #moodboard {
-        height: 300px; /* Even shorter on small devices */
+        max-width: 95vw;
+    }
+
+    /* Phone/Story format for very small screens */
+    #moodboard.phone-format {
+        width: 70vw;
+        height: 95vw;
     }
 
     .controls {
