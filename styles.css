@@ -134,14 +134,12 @@ h1 {
 }
 
 #moodboard {
-    width: 100%;
-    max-width: 600px;
-    height: 600px;
     background: white;
     position: relative;
     margin: 0 auto;
     border: 1px solid #ddd;
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .draggable {
@@ -367,7 +365,30 @@ footer a:hover {
     background: #cc0000;
 }
 
-/* Mobile-specific styles */
+/* Desktop sizes */
+@media (min-width: 769px) {
+    #moodboard {
+        width: 600px;
+        height: 600px;
+    }
+
+    #moodboard.square-format {
+        width: 600px;
+        height: 600px;
+    }
+
+    #moodboard.phone-format {
+        width: 400px;
+        height: 700px;
+    }
+
+    #moodboard.landscape-format {
+        width: 800px;
+        height: 500px;
+    }
+}
+
+/* Mobile sizes */
 @media (max-width: 768px) {
     h1 {
         font-size: 36px;
@@ -380,24 +401,21 @@ footer a:hover {
     }
 
     #moodboard {
-        max-width: 90vw; /* 90% of viewport width */
-        height: 90vw; /* Square format by default */
+        max-width: 90vw;
+        height: 90vw;
     }
 
-    /* Square format */
     #moodboard.square-format {
         width: 90vw;
         height: 90vw;
     }
 
-    /* Phone/Story format */
     #moodboard.phone-format {
         width: 60vw;
         height: 90vw;
         max-width: 400px;
     }
 
-    /* Landscape format */
     #moodboard.landscape-format {
         width: 90vw;
         height: 60vw;
@@ -445,7 +463,6 @@ footer a:hover {
         max-width: 95vw;
     }
 
-    /* Phone/Story format for very small screens */
     #moodboard.phone-format {
         width: 70vw;
         height: 95vw;
