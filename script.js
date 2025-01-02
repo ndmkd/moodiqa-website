@@ -148,10 +148,22 @@ function showImageControls(img) {
     const controls = document.getElementById('imageControls');
     controls.style.display = 'flex';
     
-    // Position controls near the selected image
     const imgRect = img.getBoundingClientRect();
-    controls.style.top = (imgRect.top - 50) + 'px';
-    controls.style.left = imgRect.left + 'px';
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        // Position controls at the bottom of the screen for mobile
+        controls.style.position = 'fixed';
+        controls.style.bottom = '20px';
+        controls.style.left = '50%';
+        controls.style.transform = 'translateX(-50%)';
+        controls.style.top = 'auto';
+    } else {
+        // Desktop positioning
+        controls.style.top = (imgRect.top - 50) + 'px';
+        controls.style.left = imgRect.left + 'px';
+        controls.style.transform = 'none';
+    }
 
     // Scale controls
     document.getElementById('scaleUp').onclick = () => {
@@ -182,3 +194,99 @@ function showImageControls(img) {
         selectedImage = null;
     };
 }
+
+function makeImageInteractive(img) {
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    // Touch events
+    img.addEventListener('touchstart', dragStart, { passive: false });
+    img.addEventListener('touchend', dragEnd, { passive: false });
+    img.addEventListener('touchmove', drag, { passive: false });
+
+    // Mouse events
+    img.addEventListener('mousedown', dragStart);
+    img.addEventListener('mouseup', dragEnd);
+    img.addEventListener('mousemove', drag);
+
+    // Handle image selection
+    img.addEventListener('click', selectImage);
+    img.addEventListener('touchend', selectImage);
+
+    function dragStart(e) {
+        if (e.type === 'touchstart') {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+        } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+        }
+
+        if (e.target === img) {
+            isDragging = true;
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+
+            xOffset = currentX;
+            yOffset = currentY;
+            setTranslate(currentX, currentY, img);
+        }
+    }
+
+    function dragEnd(e) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+    }
+
+    function selectImage(e) {
+        e.preventDefault();
+        if (selectedImage === img) {
+            selectedImage = null;
+            img.style.outline = 'none';
+            document.getElementById('imageControls').style.display = 'none';
+        } else {
+            if (selectedImage) {
+                selectedImage.style.outline = 'none';
+            }
+            selectedImage = img;
+            img.style.outline = '2px solid #6B4DE6';
+            showImageControls(img);
+        }
+    }
+}
+
+// Add touch-friendly styles for the controls
+document.addEventListener('DOMContentLoaded', function() {
+    const controls = document.getElementById('imageControls');
+    
+    if ('ontouchstart' in window) {
+        controls.style.padding = '12px';
+        const buttons = controls.getElementsByClassName('control-btn');
+        for (let btn of buttons) {
+            btn.style.width = '40px';
+            btn.style.height = '40px';
+        }
+    }
+});
