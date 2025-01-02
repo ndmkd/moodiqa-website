@@ -17,7 +17,10 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Navigation */
@@ -71,17 +74,28 @@ h1 {
 }
 
 .subtitle {
+    font-size: 18px;
     color: #666;
-    margin-bottom: 40px;
+    text-align: center;
+    margin: 0 auto 30px auto;
+    max-width: 600px;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 /* Controls */
 .controls {
-    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 0 10px;
 }
 
 .control-button {
-    padding: 10px 20px;
+    padding: 8px 16px;
+    min-width: 100px;
     margin: 0 5px;
     border: none;
     background-color: #6B4DE6;
@@ -120,7 +134,8 @@ h1 {
 }
 
 #moodboard {
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     height: 600px;
     background: white;
     position: relative;
@@ -133,6 +148,8 @@ h1 {
     position: absolute;
     cursor: move;
     user-select: none;
+    max-width: 80%;
+    max-height: 80%;
 }
 
 .moodboard-image {
@@ -194,13 +211,15 @@ footer a:hover {
 }
 
 .image-controls {
-    position: absolute;
     display: none;
+    position: fixed;
     background: white;
-    border-radius: 20px;
-    padding: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 8px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     z-index: 1000;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .control-btn {
@@ -346,4 +365,97 @@ footer a:hover {
 
 .delete-btn:hover {
     background: #cc0000;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 36px;
+        margin: 15px 0;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+
+    #moodboard {
+        height: 400px; /* Shorter on mobile */
+    }
+
+    .control-button {
+        font-size: 14px;
+        padding: 6px 12px;
+        min-width: 80px;
+    }
+
+    .control-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    /* Adjust nav for mobile */
+    .nav-links {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .instagram-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Make file input more mobile-friendly */
+    .choose-file {
+        width: 100%;
+        max-width: 200px;
+        margin: 10px auto;
+        text-align: center;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    #moodboard {
+        height: 300px; /* Even shorter on small devices */
+    }
+
+    .controls {
+        gap: 5px;
+    }
+
+    .control-button {
+        font-size: 12px;
+        padding: 5px 10px;
+        min-width: 70px;
+    }
+}
+
+/* Handle landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+    #moodboard {
+        height: 250px;
+    }
+
+    .controls {
+        margin: 10px 0;
+    }
+}
+
+/* Make buttons more touch-friendly */
+button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+}
+
+/* Improve touch target sizes */
+a, button, .control-btn {
+    padding: 8px;
+    margin: 2px;
 }
