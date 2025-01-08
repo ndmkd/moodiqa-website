@@ -53,8 +53,8 @@ nav {
 .instagram-icon {
     width: 24px;
     height: 24px;
-    color: #1a237e;
-    transition: color 0.2s ease;
+    fill: #1a237e;
+    transition: fill 0.2s ease;
 }
 
 .instagram-icon:hover {
@@ -604,5 +604,5 @@ a, button, .control-btn {
 }
 
 .instagram-link:hover .instagram-icon {
-    color: #6B4DE6;
+    fill: #6B4DE6;
 }
