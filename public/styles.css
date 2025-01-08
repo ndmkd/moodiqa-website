@@ -610,7 +610,11 @@ a, button, .control-btn {
 .format-controls {
     display: flex;
     gap: 16px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
 }
 
 .control-button {
@@ -681,4 +685,13 @@ a, button, .control-btn {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* Add styling for the heading */
+.page-title {
+    text-align: center;
+    color: #666;
+    font-size: 24px;
+    margin: 40px 0 20px;
+    font-weight: normal;
 }
