@@ -33,11 +33,26 @@
         <h1>Moodiqa</h1>
         <p class="subtitle">Create moodboards in seconds - simple, fast, and free.</p>
 
-        <div class="controls">
-            <button class="control-button" id="squareFormat">Square</button>
-            <button class="control-button" id="phoneFormat">Phone/Story</button>
-            <button class="control-button" id="landscapeFormat">Landscape</button>
-            <button class="control-button" id="saveBoard">Save Mood Board</button>
+        <div class="format-controls">
+            <button id="squareFormat" class="control-button">Square</button>
+            <button id="phoneFormat" class="control-button">Phone/Story</button>
+            <button id="landscapeFormat" class="control-button">Landscape</button>
+            <button id="fourGridFormat" class="control-button">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm9 0h7v7h-7v-7z"/>
+                </svg>
+            </button>
+            <button id="threeGridFormat" class="control-button">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M4 4h5v16H4V4zm7 0h5v16h-5V4zm7 0h5v16h-5V4z"/>
+                </svg>
+            </button>
+            <button id="twoGridFormat" class="control-button">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M4 4h7v16H4V4zm9 0h7v16h-7V4z"/>
+                </svg>
+            </button>
+            <button id="saveBoard" class="control-button">Save Image</button>
         </div>
 
         <div class="moodboard-container">

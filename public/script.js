@@ -129,6 +129,77 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
     moodboard.className = 'landscape-format';
 });
 
+document.getElementById('fourGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'four-grid-format';
+    setupGridAreas(4);
+});
+
+document.getElementById('threeGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'three-grid-format';
+    setupGridAreas(3);
+});
+
+document.getElementById('twoGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'two-grid-format';
+    setupGridAreas(2);
+});
+
+function setupGridAreas(sections) {
+    const moodboard = document.getElementById('moodboard');
+    
+    // Clear existing grid areas
+    while (moodboard.firstChild) {
+        if (!moodboard.firstChild.classList?.contains('draggable')) {
+            moodboard.removeChild(moodboard.firstChild);
+        }
+    }
+
+    // Create grid sections
+    for (let i = 0; i < sections; i++) {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+        section.dataset.sectionIndex = i;
+        moodboard.appendChild(section);
+    }
+
+    // Update image drop behavior
+    updateDropBehavior();
+}
+
+function updateDropBehavior() {
+    const sections = document.querySelectorAll('.grid-section');
+    
+    sections.forEach(section => {
+        section.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            section.classList.add('drag-over');
+        });
+
+        section.addEventListener('dragleave', () => {
+            section.classList.remove('drag-over');
+        });
+
+        section.addEventListener('drop', (e) => {
+            e.preventDefault();
+            section.classList.remove('drag-over');
+            
+            const img = document.querySelector('.dragging');
+            if (img) {
+                section.appendChild(img);
+                img.style.position = 'relative';
+                img.style.top = 'auto';
+                img.style.left = 'auto';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+            }
+        });
+    });
+}
+
 // Save functionality
 document.addEventListener('DOMContentLoaded', function() {
     const saveButton = document.getElementById('saveBoard');
