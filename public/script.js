@@ -138,26 +138,33 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             // Get the canvas element
-            const canvas = document.querySelector('canvas');
+            const canvas = document.getElementById('canvas');
+            console.log('Canvas found:', canvas);
             
             if (canvas) {
-                // Convert canvas to image data
-                const imageData = canvas.toDataURL('image/png');
-                
-                // Create a temporary link element
-                const downloadLink = document.createElement('a');
-                downloadLink.download = 'my-moodboard.png'; // Name of the downloaded file
-                downloadLink.href = imageData;
-                
-                // Trigger the download
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                
-                // Show success message
-                alert('Mood board saved to your downloads folder!');
+                try {
+                    // Convert canvas to data URL
+                    const dataURL = canvas.toDataURL('image/png');
+                    console.log('Data URL created');
+                    
+                    // Create download link
+                    const link = document.createElement('a');
+                    link.download = 'moodboard.png';
+                    link.href = dataURL;
+                    
+                    // Programmatically click the link
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    console.log('Download initiated');
+                } catch (error) {
+                    console.error('Error saving canvas:', error);
+                    alert('Error saving mood board: ' + error.message);
+                }
             } else {
-                alert('Please create a mood board first!');
+                console.error('Canvas not found');
+                alert('Error: Canvas not found');
             }
         });
     }
