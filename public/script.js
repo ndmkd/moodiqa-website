@@ -132,28 +132,26 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
 // Save functionality
 document.addEventListener('DOMContentLoaded', function() {
     const saveButton = document.getElementById('saveBoard');
-    console.log('Script loaded');
 
     if (saveButton) {
-        saveButton.addEventListener('click', function(e) {
+        saveButton.addEventListener('click', async function(e) {
             e.preventDefault();
             console.log('Save button clicked');
             
-            // Try different ways to find the canvas
-            const canvas = document.querySelector('canvas'); // Get first canvas element
-            console.log('Canvas found:', canvas);
+            // Get the mood board element
+            const moodboard = document.getElementById('moodboard');
             
-            if (canvas) {
+            if (moodboard) {
                 try {
-                    // Get the context and check if there's content
-                    const ctx = canvas.getContext('2d');
-                    console.log('Canvas context:', ctx);
+                    // Use html2canvas to convert the mood board to a canvas
+                    const canvas = await html2canvas(moodboard, {
+                        backgroundColor: '#ffffff',
+                        scale: 2, // Higher quality
+                        useCORS: true // Allow cross-origin images
+                    });
                     
-                    // Convert canvas to data URL
+                    // Convert to PNG and download
                     const dataURL = canvas.toDataURL('image/png');
-                    console.log('Created data URL');
-                    
-                    // Create and trigger download
                     const link = document.createElement('a');
                     link.download = 'moodboard.png';
                     link.href = dataURL;
@@ -161,12 +159,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     console.log('Download triggered');
                 } catch (error) {
-                    console.error('Error saving canvas:', error);
+                    console.error('Error saving mood board:', error);
                     alert('Error saving mood board: ' + error.message);
                 }
             } else {
-                console.error('No canvas found on page');
-                alert('Error: Could not find the mood board canvas');
+                console.error('Mood board element not found');
+                alert('Error: Could not find the mood board');
             }
         });
     }
