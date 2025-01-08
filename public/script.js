@@ -130,18 +130,37 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
 });
 
 // Save functionality
-document.getElementById('saveBoard').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    html2canvas(moodboard, {
-        backgroundColor: '#ffffff',
-        useCORS: true,
-        scale: 2
-    }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'moodiqa-moodboard.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const saveButton = document.getElementById('saveBoard');
+
+    if (saveButton) {
+        saveButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the canvas element
+            const canvas = document.querySelector('canvas');
+            
+            if (canvas) {
+                // Convert canvas to image data
+                const imageData = canvas.toDataURL('image/png');
+                
+                // Create a temporary link element
+                const downloadLink = document.createElement('a');
+                downloadLink.download = 'my-moodboard.png'; // Name of the downloaded file
+                downloadLink.href = imageData;
+                
+                // Trigger the download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Show success message
+                alert('Mood board saved to your downloads folder!');
+            } else {
+                alert('Please create a mood board first!');
+            }
+        });
+    }
 });
 
 function showImageControls(img) {
