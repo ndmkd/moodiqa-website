@@ -33,7 +33,9 @@ nav {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+    justify-content: flex-end;
+    padding: 20px;
 }
 
 .nav-links a {
@@ -49,9 +51,10 @@ nav {
 }
 
 .instagram-icon {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     vertical-align: middle;
+    opacity: 0.9;
 }
 
 .instagram-icon:hover {
@@ -550,13 +553,14 @@ a, button, .control-btn {
 }
 
 .login-link {
-    color: #6B4DE6;
+    color: #1a237e;
     text-decoration: none;
     font-weight: 500;
+    font-size: 16px;
 }
 
 .login-link:hover {
-    text-decoration: underline;
+    opacity: 0.8;
 }
 
 /* Ensure the login link stays on the right */
@@ -592,4 +596,9 @@ a, button, .control-btn {
 .instagram-link {
     display: flex;
     align-items: center;
+    transition: opacity 0.2s ease;
+}
+
+.instagram-link:hover {
+    opacity: 0.7;
 }
