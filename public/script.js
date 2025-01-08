@@ -334,3 +334,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const saveButton = document.querySelector('.save-button');
+
+    if (saveButton) {
+        saveButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Show success message
+            alert('Mood board saved successfully!');
+            
+            // Optional: Clear form or reset state
+            form.reset();
+        });
+    }
+});
