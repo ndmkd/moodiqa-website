@@ -336,18 +336,30 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script loaded'); // Debug log
+
     const form = document.querySelector('form');
-    const saveButton = document.querySelector('.save-button');
+    const saveButton = document.getElementById('saveBoard'); // Updated selector to match ID
+
+    console.log('Save button:', saveButton); // Debug log
+    console.log('Form:', form); // Debug log
 
     if (saveButton) {
+        console.log('Adding click listener to save button'); // Debug log
+        
         saveButton.addEventListener('click', function(e) {
+            console.log('Save button clicked'); // Debug log
             e.preventDefault();
             
             // Show success message
             alert('Mood board saved successfully!');
             
             // Optional: Clear form or reset state
-            form.reset();
+            if (form) {
+                form.reset();
+            }
         });
+    } else {
+        console.log('Save button not found!'); // Debug log
     }
 });
