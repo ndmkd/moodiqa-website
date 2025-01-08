@@ -573,3 +573,20 @@ a, button, .control-btn {
         gap: 15px;
     }
 }
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.content h2 {
+    margin-top: 30px;
+    color: #333;
+}
+
+.content p {
+    margin-bottom: 15px;
+    color: #666;
+}
