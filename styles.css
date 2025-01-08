@@ -32,12 +32,8 @@ nav {
 
 .nav-links {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    gap: 32px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-right: 60px;
+    gap: 20px;
 }
 
 .nav-links a {
@@ -552,5 +548,28 @@ a, button, .control-btn {
 
     .draggable:active {
         opacity: 0.8;
+    }
+}
+
+.login-link {
+    color: #6B4DE6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* Ensure the login link stays on the right */
+.nav-links {
+    justify-content: flex-end;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .nav-links {
+        padding: 10px;
+        gap: 15px;
     }
 }
