@@ -8,14 +8,24 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.className = 'draggable';
-                img.style.maxWidth = '150px';
-                img.style.maxHeight = '150px';
-                img.style.position = 'absolute';
-                img.style.transform = 'rotate(0deg)';
-                img.style.cursor = 'move';
-                document.getElementById('moodboard').appendChild(img);
-                makeImageDraggable(img);
+                img.className = 'grid-image';
+                
+                // Find the first empty grid section
+                const emptySection = document.querySelector('.grid-section:empty');
+                if (emptySection) {
+                    emptySection.appendChild(img);
+                    
+                    // Add click handler for image selection
+                    img.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (selectedImage) {
+                            selectedImage.classList.remove('selected');
+                        }
+                        selectedImage = img;
+                        img.classList.add('selected');
+                        showImageControls(img);
+                    });
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -131,8 +141,15 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
 
 document.getElementById('fourGridFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = '';
     moodboard.className = 'four-grid-format';
-    setupGridAreas(4);
+
+    // Create four equal sections
+    for (let i = 0; i < 4; i++) {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+        moodboard.appendChild(section);
+    }
 });
 
 document.getElementById('threeGridFormat').addEventListener('click', function() {
@@ -157,8 +174,15 @@ document.getElementById('threeGridFormat').addEventListener('click', function() 
 
 document.getElementById('twoGridFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = '';
     moodboard.className = 'two-grid-format';
-    setupGridAreas(2);
+
+    // Create two equal sections
+    for (let i = 0; i < 2; i++) {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+        moodboard.appendChild(section);
+    }
 });
 
 function setupGridAreas(sections) {
@@ -257,24 +281,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function showImageControls(img) {
     const controls = document.getElementById('imageControls');
+    const rect = img.getBoundingClientRect();
+    const parentRect = img.parentElement.getBoundingClientRect();
+    
     controls.style.display = 'flex';
-    
-    const imgRect = img.getBoundingClientRect();
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile) {
-        // Position controls at the bottom of the screen for mobile
-        controls.style.position = 'fixed';
-        controls.style.bottom = '20px';
-        controls.style.left = '50%';
-        controls.style.transform = 'translateX(-50%)';
-        controls.style.top = 'auto';
-    } else {
-        // Desktop positioning
-        controls.style.top = (imgRect.top - 50) + 'px';
-        controls.style.left = imgRect.left + 'px';
-        controls.style.transform = 'none';
-    }
+    // Position controls relative to the grid section
+    controls.style.top = `${parentRect.top + window.scrollY + 10}px`;
+    controls.style.left = `${parentRect.left + 10}px`;
 
     // Scale controls
     document.getElementById('scaleUp').onclick = () => {
