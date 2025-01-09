@@ -137,8 +137,22 @@ document.getElementById('fourGridFormat').addEventListener('click', function() {
 
 document.getElementById('threeGridFormat').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = ''; // Clear existing content
     moodboard.className = 'three-grid-format';
-    setupGridAreas(3);
+
+    // Create the three sections
+    const leftSection = document.createElement('div');
+    leftSection.className = 'grid-section left-section';
+    
+    const rightTop = document.createElement('div');
+    rightTop.className = 'grid-section right-top';
+    
+    const rightBottom = document.createElement('div');
+    rightBottom.className = 'grid-section right-bottom';
+
+    moodboard.appendChild(leftSection);
+    moodboard.appendChild(rightTop);
+    moodboard.appendChild(rightBottom);
 });
 
 document.getElementById('twoGridFormat').addEventListener('click', function() {
