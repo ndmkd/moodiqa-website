@@ -163,12 +163,33 @@ h1 {
 
 .draggable {
     position: absolute;
-    max-width: 150px;
-    max-height: 150px;
-    touch-action: none;
-    -webkit-user-select: none;
-    user-select: none;
-    will-change: transform, left, top;
+    cursor: move;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.draggable.selected {
+    outline: 2px solid #6B4DE6;
+}
+
+.image-controls {
+    position: fixed;
+    display: none;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.control-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-btn {
+    color: red;
 }
 
 .moodboard-image {
