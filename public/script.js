@@ -8,134 +8,86 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.className = 'grid-image';
+                img.className = 'draggable grid-image';
                 
-                // Find the first empty grid section
-                const emptySection = document.querySelector('.grid-section:empty');
-                if (emptySection) {
-                    const imageContainer = document.createElement('div');
-                    imageContainer.className = 'image-container';
-                    imageContainer.appendChild(img);
-                    emptySection.appendChild(imageContainer);
-                    
-                    // Initialize image position at center
-                    centerImageInContainer(img, imageContainer);
-                    
-                    // Add pan functionality
-                    enableImagePanning(img, imageContainer);
-                    
-                    // Add click handler for image selection
-                    img.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (selectedImage) {
-                            selectedImage.classList.remove('selected');
-                        }
-                        selectedImage = img;
-                        img.classList.add('selected');
-                        showImageControls(img);
-                    });
-                }
+                // Ensure image loads before positioning
+                img.onload = function() {
+                    const emptySection = document.querySelector('.grid-section:empty');
+                    if (emptySection) {
+                        // Create wrapper for maintaining aspect ratio
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'image-wrapper';
+                        wrapper.appendChild(img);
+                        emptySection.appendChild(wrapper);
+                        
+                        // Calculate and set initial position
+                        const scale = Math.min(
+                            emptySection.offsetWidth / img.naturalWidth,
+                            emptySection.offsetHeight / img.naturalHeight
+                        );
+                        
+                        img.style.width = `${img.naturalWidth * scale}px`;
+                        img.style.height = `${img.naturalHeight * scale}px`;
+                        img.style.position = 'absolute';
+                        img.style.left = '50%';
+                        img.style.top = '50%';
+                        img.style.transform = 'translate(-50%, -50%)';
+                        
+                        makeDraggable(img, emptySection);
+                    }
+                };
             };
             reader.readAsDataURL(file);
         }
     }
 });
 
-function centerImageInContainer(img, container) {
-    img.style.position = 'absolute';
-    img.style.left = '50%';
-    img.style.top = '50%';
-    img.style.transform = 'translate(-50%, -50%)';
-}
-
-function enableImagePanning(img, container) {
-    let isDragging = false;
-    let currentX, currentY, initialX, initialY;
-    let xOffset = 0, yOffset = 0;
-
-    img.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', dragEnd);
-
-    function dragStart(e) {
-        if (e.target === img) {
-            isDragging = true;
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-        }
-    }
-
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault();
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
-
-            // Limit the panning to keep image visible
-            const bounds = calculatePanningBounds(img, container);
-            xOffset = Math.min(Math.max(currentX, bounds.minX), bounds.maxX);
-            yOffset = Math.min(Math.max(currentY, bounds.minY), bounds.maxY);
-
-            img.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-        }
-    }
-
-    function dragEnd() {
-        isDragging = false;
-    }
-}
-
-function calculatePanningBounds(img, container) {
-    const containerRect = container.getBoundingClientRect();
-    const imgRect = img.getBoundingClientRect();
-    
-    return {
-        minX: containerRect.width - imgRect.width,
-        maxX: 0,
-        minY: containerRect.height - imgRect.height,
-        maxY: 0
-    };
-}
-
-function makeImageDraggable(img) {
+function makeDraggable(element, container) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    let rotation = 0;
-    let scale = 1;
-
-    img.addEventListener('mousedown', dragMouseDown);
-    img.addEventListener('click', selectImage);
-
-    function selectImage(e) {
-        e.stopPropagation();
-        if (selectedImage) {
-            selectedImage.style.outline = 'none';
-        }
-        selectedImage = img;
-        img.style.outline = '2px solid #6B4DE6';
-        showImageControls(img);
-    }
+    element.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
         e.preventDefault();
+        // Get mouse position at startup
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
+        
+        // Bring dragged image to front
+        element.style.zIndex = '1000';
     }
 
     function elementDrag(e) {
         e.preventDefault();
+        // Calculate new position
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        img.style.top = (img.offsetTop - pos2) + "px";
-        img.style.left = (img.offsetLeft - pos1) + "px";
+
+        // Get container boundaries
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        // Calculate new position while keeping element within container
+        let newTop = element.offsetTop - pos2;
+        let newLeft = element.offsetLeft - pos1;
+
+        // Add boundary constraints
+        newTop = Math.max(0, Math.min(newTop, containerRect.height - elementRect.height));
+        newLeft = Math.max(0, Math.min(newLeft, containerRect.width - elementRect.width));
+
+        // Set new position
+        element.style.top = newTop + "px";
+        element.style.left = newLeft + "px";
     }
 
     function closeDragElement() {
+        // Stop moving when mouse button is released
         document.onmouseup = null;
         document.onmousemove = null;
+        element.style.zIndex = '1';
     }
 }
 
@@ -308,38 +260,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveButton = document.getElementById('saveBoard');
 
     if (saveButton) {
-        saveButton.addEventListener('click', async function(e) {
-            e.preventDefault();
-            console.log('Save button clicked');
-            
-            // Get the mood board element
+        saveButton.addEventListener('click', function() {
             const moodboard = document.getElementById('moodboard');
             
-            if (moodboard) {
-                try {
-                    // Use html2canvas to convert the mood board to a canvas
-                    const canvas = await html2canvas(moodboard, {
-                        backgroundColor: '#ffffff',
-                        scale: 2, // Higher quality
-                        useCORS: true // Allow cross-origin images
-                    });
-                    
-                    // Convert to PNG and download
-                    const dataURL = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-                    link.download = 'moodboard.png';
-                    link.href = dataURL;
-                    link.click();
-                    
-                    console.log('Download triggered');
-                } catch (error) {
-                    console.error('Error saving mood board:', error);
-                    alert('Error saving mood board: ' + error.message);
-                }
-            } else {
-                console.error('Mood board element not found');
-                alert('Error: Could not find the mood board');
-            }
+            // Clone the moodboard to preserve original styling
+            const clone = moodboard.cloneNode(true);
+            document.body.appendChild(clone);
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            
+            // Ensure all images maintain their exact position and size
+            clone.querySelectorAll('.grid-image').forEach(img => {
+                const rect = img.getBoundingClientRect();
+                img.style.width = rect.width + 'px';
+                img.style.height = rect.height + 'px';
+                img.style.transform = 'none';
+                img.style.maxWidth = 'none';
+                img.style.maxHeight = 'none';
+            });
+
+            html2canvas(clone, {
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff',
+                scale: 2 // Increase quality
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'moodboard.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                document.body.removeChild(clone);
+            });
         });
     }
 });
