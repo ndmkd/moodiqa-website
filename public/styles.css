@@ -717,3 +717,12 @@ a, button, .control-btn {
     margin: 40px 0 20px;
     font-weight: normal;
 }
+
+.moodiqa-title {
+    text-align: center;
+    font-family: Garamond, serif;
+    font-weight: bold;
+    font-size: 36px;
+    margin: 40px 0 20px;
+    color: #1a237e;
+}
