@@ -818,8 +818,9 @@ a, button, .control-btn {
 .grid-image {
     position: absolute;
     cursor: move;
-    max-width: none;
-    max-height: none;
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
 }
 
 .grid-image.selected {
@@ -835,4 +836,11 @@ a, button, .control-btn {
 
 .three-grid-format .left-section {
     aspect-ratio: 0.5;
+}
+
+/* Ensure proper sizing for different layouts */
+.two-grid-format .grid-section,
+.three-grid-format .grid-section,
+.four-grid-format .grid-section {
+    min-height: 300px;
 }

@@ -10,289 +10,93 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
                 img.src = e.target.result;
                 img.className = 'draggable grid-image';
                 
-                // Ensure image loads before positioning
-                img.onload = function() {
-                    const emptySection = document.querySelector('.grid-section:empty');
-                    if (emptySection) {
-                        // Create wrapper for maintaining aspect ratio
-                        const wrapper = document.createElement('div');
-                        wrapper.className = 'image-wrapper';
-                        wrapper.appendChild(img);
-                        emptySection.appendChild(wrapper);
-                        
-                        // Calculate and set initial position
-                        const scale = Math.min(
-                            emptySection.offsetWidth / img.naturalWidth,
-                            emptySection.offsetHeight / img.naturalHeight
-                        );
-                        
-                        img.style.width = `${img.naturalWidth * scale}px`;
-                        img.style.height = `${img.naturalHeight * scale}px`;
-                        img.style.position = 'absolute';
-                        img.style.left = '50%';
-                        img.style.top = '50%';
-                        img.style.transform = 'translate(-50%, -50%)';
-                        
-                        makeDraggable(img, emptySection);
+                const emptySection = document.querySelector('.grid-section:empty');
+                if (emptySection) {
+                    img.style.position = 'absolute';
+                    img.style.left = '50%';
+                    img.style.top = '50%';
+                    img.style.transform = 'translate(-50%, -50%)';
+                    emptySection.appendChild(img);
+                    
+                    // Make image draggable
+                    let isDragging = false;
+                    let currentX;
+                    let currentY;
+                    let initialX;
+                    let initialY;
+                    let xOffset = 0;
+                    let yOffset = 0;
+
+                    img.addEventListener('mousedown', dragStart);
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('mouseup', dragEnd);
+
+                    function dragStart(e) {
+                        initialX = e.clientX - xOffset;
+                        initialY = e.clientY - yOffset;
+                        if (e.target === img) {
+                            isDragging = true;
+                        }
                     }
-                };
+
+                    function drag(e) {
+                        if (isDragging) {
+                            e.preventDefault();
+                            currentX = e.clientX - initialX;
+                            currentY = e.clientY - initialY;
+                            xOffset = currentX;
+                            yOffset = currentY;
+                            img.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                        }
+                    }
+
+                    function dragEnd() {
+                        isDragging = false;
+                    }
+
+                    // Add click handler for image selection
+                    img.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (selectedImage) {
+                            selectedImage.classList.remove('selected');
+                        }
+                        selectedImage = img;
+                        img.classList.add('selected');
+                        showImageControls(img);
+                    });
+                }
             };
             reader.readAsDataURL(file);
         }
     }
 });
 
-function makeDraggable(element, container) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    element.onmousedown = dragMouseDown;
-
-    function dragMouseDown(e) {
-        e.preventDefault();
-        // Get mouse position at startup
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-        
-        // Bring dragged image to front
-        element.style.zIndex = '1000';
-    }
-
-    function elementDrag(e) {
-        e.preventDefault();
-        // Calculate new position
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-
-        // Get container boundaries
-        const containerRect = container.getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-
-        // Calculate new position while keeping element within container
-        let newTop = element.offsetTop - pos2;
-        let newLeft = element.offsetLeft - pos1;
-
-        // Add boundary constraints
-        newTop = Math.max(0, Math.min(newTop, containerRect.height - elementRect.height));
-        newLeft = Math.max(0, Math.min(newLeft, containerRect.width - elementRect.width));
-
-        // Set new position
-        element.style.top = newTop + "px";
-        element.style.left = newLeft + "px";
-    }
-
-    function closeDragElement() {
-        // Stop moving when mouse button is released
-        document.onmouseup = null;
-        document.onmousemove = null;
-        element.style.zIndex = '1';
-    }
-}
-
-// Click outside to deselect
-document.getElementById('moodboard').addEventListener('click', function(e) {
-    if (e.target === this) {
-        if (selectedImage) {
-            selectedImage.style.outline = 'none';
-            selectedImage = null;
-            document.getElementById('imageControls').style.display = 'none';
-        }
-    }
-});
-
-// Keyboard controls
-document.addEventListener('keydown', function(e) {
-    if (!selectedImage) return;
-
-    let currentRotation = parseInt(selectedImage.style.transform.replace('rotate(', '')) || 0;
-    let currentScale = parseFloat(selectedImage.style.scale) || 1;
-
-    switch(e.key) {
-        case '[':
-            currentRotation -= 5;
-            selectedImage.style.transform = `rotate(${currentRotation}deg)`;
-            break;
-        case ']':
-            currentRotation += 5;
-            selectedImage.style.transform = `rotate(${currentRotation}deg)`;
-            break;
-        case 'ArrowUp':
-            if (e.ctrlKey) {
-                e.preventDefault();
-                currentScale += 0.1;
-                selectedImage.style.scale = currentScale;
-            }
-            break;
-        case 'ArrowDown':
-            if (e.ctrlKey) {
-                e.preventDefault();
-                currentScale = Math.max(0.1, currentScale - 0.1);
-                selectedImage.style.scale = currentScale;
-            }
-            break;
-        case 'Delete':
-        case 'Backspace':
-            selectedImage.remove();
-            selectedImage = null;
-            break;
-    }
-});
-
-// Format buttons
-document.getElementById('squareFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.className = 'square-format';
-});
-
-document.getElementById('phoneFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.className = 'phone-format';
-});
-
-document.getElementById('landscapeFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.className = 'landscape-format';
-});
-
-document.getElementById('fourGridFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.innerHTML = '';
-    moodboard.className = 'four-grid-format';
-
-    // Create four equal sections
-    for (let i = 0; i < 4; i++) {
-        const section = document.createElement('div');
-        section.className = 'grid-section';
-        moodboard.appendChild(section);
-    }
-});
-
-document.getElementById('threeGridFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.innerHTML = ''; // Clear existing content
-    moodboard.className = 'three-grid-format';
-
-    // Create the three sections
-    const leftSection = document.createElement('div');
-    leftSection.className = 'grid-section left-section';
-    
-    const rightTop = document.createElement('div');
-    rightTop.className = 'grid-section right-top';
-    
-    const rightBottom = document.createElement('div');
-    rightBottom.className = 'grid-section right-bottom';
-
-    moodboard.appendChild(leftSection);
-    moodboard.appendChild(rightTop);
-    moodboard.appendChild(rightBottom);
-});
-
-document.getElementById('twoGridFormat').addEventListener('click', function() {
-    const moodboard = document.getElementById('moodboard');
-    moodboard.innerHTML = '';
-    moodboard.className = 'two-grid-format';
-
-    // Create two equal sections
-    for (let i = 0; i < 2; i++) {
-        const section = document.createElement('div');
-        section.className = 'grid-section';
-        moodboard.appendChild(section);
-    }
-});
-
-function setupGridAreas(sections) {
+// Update save functionality
+document.getElementById('saveBoard').addEventListener('click', function() {
     const moodboard = document.getElementById('moodboard');
     
-    // Clear existing grid areas
-    while (moodboard.firstChild) {
-        if (!moodboard.firstChild.classList?.contains('draggable')) {
-            moodboard.removeChild(moodboard.firstChild);
-        }
-    }
-
-    // Create grid sections
-    for (let i = 0; i < sections; i++) {
-        const section = document.createElement('div');
-        section.className = 'grid-section';
-        section.dataset.sectionIndex = i;
-        moodboard.appendChild(section);
-    }
-
-    // Update image drop behavior
-    updateDropBehavior();
-}
-
-function updateDropBehavior() {
-    const sections = document.querySelectorAll('.grid-section');
-    
-    sections.forEach(section => {
-        section.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            section.classList.add('drag-over');
-        });
-
-        section.addEventListener('dragleave', () => {
-            section.classList.remove('drag-over');
-        });
-
-        section.addEventListener('drop', (e) => {
-            e.preventDefault();
-            section.classList.remove('drag-over');
-            
-            const img = document.querySelector('.dragging');
-            if (img) {
-                section.appendChild(img);
-                img.style.position = 'relative';
-                img.style.top = 'auto';
-                img.style.left = 'auto';
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-            }
-        });
-    });
-}
-
-// Save functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const saveButton = document.getElementById('saveBoard');
-
-    if (saveButton) {
-        saveButton.addEventListener('click', function() {
-            const moodboard = document.getElementById('moodboard');
-            
-            // Clone the moodboard to preserve original styling
-            const clone = moodboard.cloneNode(true);
-            document.body.appendChild(clone);
-            clone.style.position = 'absolute';
-            clone.style.left = '-9999px';
-            
-            // Ensure all images maintain their exact position and size
-            clone.querySelectorAll('.grid-image').forEach(img => {
-                const rect = img.getBoundingClientRect();
+    html2canvas(moodboard, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        scale: 2,
+        onclone: function(clonedDoc) {
+            const clonedBoard = clonedDoc.getElementById('moodboard');
+            clonedBoard.querySelectorAll('.grid-image').forEach(img => {
+                const originalImg = moodboard.querySelector(`img[src="${img.src}"]`);
+                const rect = originalImg.getBoundingClientRect();
+                const computedStyle = window.getComputedStyle(originalImg);
+                img.style.transform = computedStyle.transform;
                 img.style.width = rect.width + 'px';
                 img.style.height = rect.height + 'px';
-                img.style.transform = 'none';
-                img.style.maxWidth = 'none';
-                img.style.maxHeight = 'none';
             });
-
-            html2canvas(clone, {
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#ffffff',
-                scale: 2 // Increase quality
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'moodboard.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                document.body.removeChild(clone);
-            });
-        });
-    }
+        }
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'moodboard.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
 });
 
 function showImageControls(img) {
