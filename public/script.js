@@ -13,7 +13,16 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
                 // Find the first empty grid section
                 const emptySection = document.querySelector('.grid-section:empty');
                 if (emptySection) {
-                    emptySection.appendChild(img);
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-container';
+                    imageContainer.appendChild(img);
+                    emptySection.appendChild(imageContainer);
+                    
+                    // Initialize image position at center
+                    centerImageInContainer(img, imageContainer);
+                    
+                    // Add pan functionality
+                    enableImagePanning(img, imageContainer);
                     
                     // Add click handler for image selection
                     img.addEventListener('click', function(e) {
@@ -31,6 +40,62 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
         }
     }
 });
+
+function centerImageInContainer(img, container) {
+    img.style.position = 'absolute';
+    img.style.left = '50%';
+    img.style.top = '50%';
+    img.style.transform = 'translate(-50%, -50%)';
+}
+
+function enableImagePanning(img, container) {
+    let isDragging = false;
+    let currentX, currentY, initialX, initialY;
+    let xOffset = 0, yOffset = 0;
+
+    img.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        if (e.target === img) {
+            isDragging = true;
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+
+            // Limit the panning to keep image visible
+            const bounds = calculatePanningBounds(img, container);
+            xOffset = Math.min(Math.max(currentX, bounds.minX), bounds.maxX);
+            yOffset = Math.min(Math.max(currentY, bounds.minY), bounds.maxY);
+
+            img.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+        }
+    }
+
+    function dragEnd() {
+        isDragging = false;
+    }
+}
+
+function calculatePanningBounds(img, container) {
+    const containerRect = container.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    
+    return {
+        minX: containerRect.width - imgRect.width,
+        maxX: 0,
+        minY: containerRect.height - imgRect.height,
+        maxY: 0
+    };
+}
 
 function makeImageDraggable(img) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
