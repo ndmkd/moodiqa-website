@@ -865,3 +865,72 @@ a, button, .control-btn {
 .four-grid-format .grid-section {
     min-height: 300px;
 }
+
+/* Add these format styles */
+.square-format {
+    aspect-ratio: 1/1;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f5f5f5;
+}
+
+.phone-format {
+    aspect-ratio: 9/16;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #f5f5f5;
+}
+
+.landscape-format {
+    aspect-ratio: 16/9;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #f5f5f5;
+}
+
+.two-grid-format {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 4px;
+}
+
+.three-grid-format {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 4px;
+}
+
+.three-grid-format .left-section {
+    grid-row: span 2;
+}
+
+.four-grid-format {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 4px;
+}
+
+/* Ensure all formats have minimum height */
+#moodboard {
+    min-height: 400px;
+}

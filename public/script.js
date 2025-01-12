@@ -121,3 +121,65 @@ document.getElementById('saveBoard').addEventListener('click', function() {
         link.click();
     });
 });
+
+// Original format buttons
+document.getElementById('squareFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'square-format';
+});
+
+document.getElementById('phoneFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'phone-format';
+});
+
+document.getElementById('landscapeFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.className = 'landscape-format';
+});
+
+// Grid format buttons
+document.getElementById('fourGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = '';
+    moodboard.className = 'four-grid-format';
+    
+    // Create four sections
+    for (let i = 0; i < 4; i++) {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+        moodboard.appendChild(section);
+    }
+});
+
+document.getElementById('threeGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = '';
+    moodboard.className = 'three-grid-format';
+    
+    // Create left section
+    const leftSection = document.createElement('div');
+    leftSection.className = 'grid-section left-section';
+    moodboard.appendChild(leftSection);
+    
+    // Create right sections
+    const rightTop = document.createElement('div');
+    rightTop.className = 'grid-section right-top';
+    const rightBottom = document.createElement('div');
+    rightBottom.className = 'grid-section right-bottom';
+    moodboard.appendChild(rightTop);
+    moodboard.appendChild(rightBottom);
+});
+
+document.getElementById('twoGridFormat').addEventListener('click', function() {
+    const moodboard = document.getElementById('moodboard');
+    moodboard.innerHTML = '';
+    moodboard.className = 'two-grid-format';
+    
+    // Create two sections
+    for (let i = 0; i < 2; i++) {
+        const section = document.createElement('div');
+        section.className = 'grid-section';
+        moodboard.appendChild(section);
+    }
+});
