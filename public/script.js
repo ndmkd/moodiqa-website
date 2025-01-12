@@ -12,6 +12,12 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
                 
                 const emptySection = document.querySelector('.grid-section:empty');
                 if (emptySection) {
+                    img.style.position = 'absolute';
+                    img.style.width = '50%';
+                    img.style.top = '50%';
+                    img.style.left = '50%';
+                    img.style.transform = 'translate(-50%, -50%)';
+                    
                     emptySection.appendChild(img);
                     makeDraggable(img);
                     
@@ -103,7 +109,14 @@ document.getElementById('deleteBtn').addEventListener('click', function() {
 
 function showImageControls(img) {
     const controls = document.getElementById('imageControls');
+    const rect = img.getBoundingClientRect();
+    const parentRect = img.parentElement.getBoundingClientRect();
+    
     controls.style.display = 'flex';
+    controls.style.position = 'absolute';
+    controls.style.top = `${parentRect.top + window.scrollY + 10}px`;
+    controls.style.left = `${parentRect.left + 10}px`;
+    controls.style.zIndex = '1000';
 }
 
 // Save functionality

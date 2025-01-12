@@ -164,9 +164,8 @@ h1 {
 .draggable {
     position: absolute;
     cursor: move;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    max-width: 90%;
+    max-height: 90%;
 }
 
 .draggable.selected {
@@ -174,10 +173,14 @@ h1 {
 }
 
 .image-controls {
-    position: fixed;
+    position: absolute;
     display: none;
     gap: 10px;
     z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .control-btn {
@@ -186,6 +189,10 @@ h1 {
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 4px;
+}
+
+.control-btn:hover {
+    background-color: #f5f5f5;
 }
 
 .delete-btn {
