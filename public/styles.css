@@ -153,12 +153,14 @@ h1 {
 }
 
 #moodboard {
-    background: white;
-    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-height: 600px;
+    width: 100%;
+    max-width: 800px;
     margin: 0 auto;
-    border: 1px solid #ddd;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    position: relative;
 }
 
 .draggable {
@@ -723,7 +725,8 @@ a, button, .control-btn {
 .grid-section {
     position: relative;
     overflow: hidden;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
     min-height: 200px;
 }
 
@@ -795,18 +798,36 @@ a, button, .control-btn {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 4px;
-    height: 600px;
-    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
     padding: 4px;
+}
+
+.three-grid-format {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 4px;
+}
+
+.three-grid-format .left-section {
+    grid-row: span 2;
 }
 
 .two-grid-format {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
     gap: 4px;
-    height: 600px;
-    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
     padding: 4px;
 }
 
@@ -814,7 +835,9 @@ a, button, .control-btn {
 .grid-section {
     position: relative;
     overflow: hidden;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    min-height: 200px;
 }
 
 .grid-section img {
@@ -829,7 +852,9 @@ a, button, .control-btn {
 .grid-section {
     position: relative;
     overflow: hidden;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    min-height: 200px;
 }
 
 .image-wrapper {
@@ -879,7 +904,9 @@ a, button, .control-btn {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
-    background: #f5f5f5;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .phone-format {
@@ -887,7 +914,9 @@ a, button, .control-btn {
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    background: #f5f5f5;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .landscape-format {
@@ -895,7 +924,9 @@ a, button, .control-btn {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    background: #f5f5f5;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .two-grid-format {
