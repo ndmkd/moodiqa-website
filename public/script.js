@@ -70,9 +70,17 @@ function makeDraggable(element) {
         let newTop = element.offsetTop - pos2;
         let newLeft = element.offsetLeft - pos1;
 
-        // Keep image within moodboard boundaries
-        newTop = Math.max(0, Math.min(newTop, moodboardRect.height - elementRect.height));
-        newLeft = Math.max(0, Math.min(newLeft, moodboardRect.width - elementRect.width));
+        // Keep at least 20% of the image within the moodboard
+        const minVisiblePortion = 0.2;
+        
+        const maxTop = moodboardRect.height + (elementRect.height * (1 - minVisiblePortion));
+        const maxLeft = moodboardRect.width + (elementRect.width * (1 - minVisiblePortion));
+        const minTop = -(elementRect.height * (1 - minVisiblePortion));
+        const minLeft = -(elementRect.width * (1 - minVisiblePortion));
+
+        // Apply boundaries
+        newTop = Math.max(minTop, Math.min(newTop, maxTop));
+        newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
 
         element.style.top = newTop + "px";
         element.style.left = newLeft + "px";
