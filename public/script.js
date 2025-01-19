@@ -11,13 +11,21 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
                 img.className = 'draggable';
                 
                 const moodboard = document.getElementById('moodboard');
+                const moodboardRect = moodboard.getBoundingClientRect();
+                
+                // Set initial image properties
                 img.style.position = 'absolute';
                 img.style.maxWidth = '80%';
                 img.style.maxHeight = '80%';
+                img.style.width = 'auto';
+                img.style.height = 'auto';
+                
+                // Ensure image is placed within moodboard
                 img.style.top = '50%';
                 img.style.left = '50%';
                 img.style.transform = 'translate(-50%, -50%)';
                 
+                // Add image to moodboard
                 moodboard.appendChild(img);
                 makeDraggable(img);
             };
@@ -36,6 +44,7 @@ function makeDraggable(element) {
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
+        element.style.zIndex = '1000';
     }
 
     function elementDrag(e) {
@@ -44,13 +53,28 @@ function makeDraggable(element) {
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        element.style.top = (element.offsetTop - pos2) + "px";
-        element.style.left = (element.offsetLeft - pos1) + "px";
+
+        // Get moodboard boundaries
+        const moodboard = document.getElementById('moodboard');
+        const moodboardRect = moodboard.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        // Calculate new position
+        let newTop = element.offsetTop - pos2;
+        let newLeft = element.offsetLeft - pos1;
+
+        // Keep image within moodboard boundaries
+        newTop = Math.max(0, Math.min(newTop, moodboardRect.height - elementRect.height));
+        newLeft = Math.max(0, Math.min(newLeft, moodboardRect.width - elementRect.width));
+
+        element.style.top = newTop + "px";
+        element.style.left = newLeft + "px";
     }
 
     function closeDragElement() {
         document.onmouseup = null;
         document.onmousemove = null;
+        element.style.zIndex = 'auto';
     }
 }
 

@@ -160,19 +160,24 @@ h1 {
 }
 
 #moodboard {
+    position: relative;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
     background: #ffffff;
     border: 1px solid #e0e0e0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden;
+    min-height: 600px;
 }
 
 .draggable {
     position: absolute;
     cursor: move;
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    user-select: none;
 }
 
 .draggable.selected {
