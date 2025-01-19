@@ -206,7 +206,6 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
     section.style.border = 'none';
     moodboard.appendChild(section);
 });
-
 // Add click handler to hide controls when clicking outside
 document.addEventListener('click', function(e) {
     if (!e.target.classList.contains('draggable') && 

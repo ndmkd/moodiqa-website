@@ -186,13 +186,14 @@ h1 {
 
 .image-controls {
     display: none;
-    position: absolute;
+    position: fixed;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
     padding: 8px;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 1001;
+    border: 1px solid #ddd;
 }
 
 .control-btn {
@@ -202,6 +203,11 @@ h1 {
     padding: 4px 8px;
     cursor: pointer;
     font-size: 14px;
+    min-width: 30px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .control-btn:hover {
