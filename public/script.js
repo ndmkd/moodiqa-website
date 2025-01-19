@@ -1,4 +1,5 @@
 let selectedImage = null;
+let currentRotation = 0;
 
 document.getElementById('imageInput').addEventListener('change', function(e) {
     const files = e.target.files;
@@ -97,18 +98,17 @@ document.getElementById('scaleDown').addEventListener('click', function() {
     }
 });
 
-let rotation = 0;
 document.getElementById('rotateLeft').addEventListener('click', function() {
     if (selectedImage) {
-        rotation -= 90;
-        selectedImage.style.transform = `rotate(${rotation}deg)`;
+        currentRotation = (currentRotation - 90) % 360;
+        selectedImage.style.transform = `rotate(${currentRotation}deg)`;
     }
 });
 
 document.getElementById('rotateRight').addEventListener('click', function() {
     if (selectedImage) {
-        rotation += 90;
-        selectedImage.style.transform = `rotate(${rotation}deg)`;
+        currentRotation = (currentRotation + 90) % 360;
+        selectedImage.style.transform = `rotate(${currentRotation}deg)`;
     }
 });
 
@@ -123,13 +123,9 @@ document.getElementById('deleteBtn').addEventListener('click', function() {
 function showImageControls(img) {
     const controls = document.getElementById('imageControls');
     const rect = img.getBoundingClientRect();
-    const parentRect = img.parentElement.getBoundingClientRect();
-    
     controls.style.display = 'flex';
-    controls.style.position = 'absolute';
-    controls.style.top = `${parentRect.top + window.scrollY + 10}px`;
-    controls.style.left = `${parentRect.left + 10}px`;
-    controls.style.zIndex = '1000';
+    controls.style.top = `${rect.top + window.scrollY - 40}px`;
+    controls.style.left = `${rect.left}px`;
 }
 
 // Save functionality
@@ -209,4 +205,16 @@ document.getElementById('landscapeFormat').addEventListener('click', function() 
     section.style.height = '100%';
     section.style.border = 'none';
     moodboard.appendChild(section);
+});
+
+// Add click handler to hide controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('draggable') && 
+        !e.target.classList.contains('control-btn')) {
+        if (selectedImage) {
+            selectedImage.classList.remove('selected');
+            selectedImage = null;
+        }
+        document.getElementById('imageControls').style.display = 'none';
+    }
 });
