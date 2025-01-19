@@ -10,27 +10,16 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
                 img.src = e.target.result;
                 img.className = 'draggable';
                 
-                const emptySection = document.querySelector('.grid-section:empty');
-                if (emptySection) {
-                    img.style.position = 'absolute';
-                    img.style.width = '50%';
-                    img.style.top = '50%';
-                    img.style.left = '50%';
-                    img.style.transform = 'translate(-50%, -50%)';
-                    
-                    emptySection.appendChild(img);
-                    makeDraggable(img);
-                    
-                    img.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (selectedImage) {
-                            selectedImage.classList.remove('selected');
-                        }
-                        selectedImage = img;
-                        img.classList.add('selected');
-                        showImageControls(img);
-                    });
-                }
+                const moodboard = document.getElementById('moodboard');
+                img.style.position = 'absolute';
+                img.style.maxWidth = '80%';
+                img.style.maxHeight = '80%';
+                img.style.top = '50%';
+                img.style.left = '50%';
+                img.style.transform = 'translate(-50%, -50%)';
+                
+                moodboard.appendChild(img);
+                makeDraggable(img);
             };
             reader.readAsDataURL(file);
         }
@@ -47,9 +36,6 @@ function makeDraggable(element) {
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
-        
-        // Bring dragged element to front
-        element.style.zIndex = '1000';
     }
 
     function elementDrag(e) {
@@ -58,25 +44,13 @@ function makeDraggable(element) {
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-
-        // Get container boundaries
-        const container = element.parentElement;
-        const containerRect = container.getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-
-        // Calculate new position
-        let newTop = element.offsetTop - pos2;
-        let newLeft = element.offsetLeft - pos1;
-
-        // Set new position
-        element.style.top = newTop + "px";
-        element.style.left = newLeft + "px";
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
     }
 
     function closeDragElement() {
         document.onmouseup = null;
         document.onmousemove = null;
-        element.style.zIndex = '1';
     }
 }
 
